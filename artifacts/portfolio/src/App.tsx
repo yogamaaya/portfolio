@@ -220,28 +220,9 @@ export default function App() {
           transition={{ delay: 0.8, duration: 1 }}
           className="mt-8 text-center flex flex-col items-center gap-6"
         >
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 max-w-3xl">
-            {[
-              "Zero Trust Architecture",
-              "AI Governance",
-              "Cloud Security",
-              "Identity & Access Management",
-              "Data Sovereignty",
-              "Threat Modeling",
-              "Security Strategy",
-              "AI Risk",
-              "OAuth 2.0 · SAML · JWT",
-              "Vendor Risk",
-              "Multimodal AI",
-              "Incident Response",
-              "Privacy-First Engineering",
-              "Systems Architecture",
-            ].map((kw) => (
-              <span key={kw} className="font-mono text-[11px] tracking-widest text-muted/80 uppercase">
-                {kw}
-              </span>
-            ))}
-          </div>
+          <p className="font-sans font-light text-base md:text-lg tracking-[0.12em] text-muted/90 text-center">
+            Strategy &nbsp;·&nbsp; Security Architecture &nbsp;·&nbsp; AI Research
+          </p>
           <div className="w-full max-w-lg h-px bg-white/10 mt-2"></div>
           <motion.div 
             animate={{ y: [0, 8, 0] }}
