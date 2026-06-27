@@ -2,6 +2,59 @@ import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowDown } from "lucide-react";
 
+const experience = [
+  {
+    id: "mt-bank",
+    period: "2022 – 2024",
+    org: "M&T Bank",
+    title: "Change Champion · Enterprise Reorg",
+    accent: "bg-cyan-accent",
+    summary: "Drove organisational change across one of the largest regional banks in the United States as it scaled to the next tier of operations.",
+    detail: "Embedded as a change champion during a critical period of M&T Bank's organisational restructuring — a transformation affecting thousands of employees and reshaping how the institution operated at scale. The role required holding clarity amid institutional ambiguity: translating top-level strategic mandates into ground-level behavioural change, maintaining alignment across cross-functional teams, and ensuring that new processes took root rather than stalling at rollout. This is what change governance looks like inside a regulated, complex financial institution.",
+    chips: ["Enterprise Change Management", "Organisational Design", "Financial Services", "Cross-Functional Alignment", "Stakeholder Communication"]
+  },
+  {
+    id: "meta-openai",
+    period: "2024 – 2025",
+    org: "Meta · OpenAI",
+    title: "Data Quality Assurance · Text-to-Vision Models",
+    accent: "bg-violet-accent",
+    summary: "Contributed to the data quality pipeline for frontier text-to-vision AI models at the scale where correctness is not optional.",
+    detail: "Performed high-precision data quality assurance for text-to-vision model training pipelines at Meta and OpenAI — two of the most consequential AI research organisations in the world. The work operated at the intersection of human judgment and machine learning: reviewing, annotating, and validating multimodal data to ensure the models learned from clean, correctly-labelled signal. Data quality at this level is not a support function — it is architecture. What a model learns is determined entirely by what it is shown.",
+    chips: ["Multimodal AI", "Data Quality Assurance", "Text-to-Vision", "AI Annotation", "Meta", "OpenAI", "Model Training Pipeline"]
+  },
+  {
+    id: "atsa",
+    period: "2023 – Present",
+    org: "A Thousand Suns Academy",
+    title: "Systems Architect · Product Owner",
+    accent: "bg-teal-accent",
+    summary: "Encoding esoteric and ancient wisdom into a secure, scalable modern infrastructure — from architecture approval to AI automation.",
+    detail: "Reviewed and approved the production cloud architecture across Flutter (iOS + Android), AWS Application Load Balancer, NestJS API, Cognito identity (OAuth 2.0 / SAML 2.0 / JWT), RDS PostgreSQL, and an async media pipeline (S3 → Lambda → MediaConvert → CloudFront). Maintained the stack as the single source of truth through every revision. Built the Drive Transcriber pipeline: event recording to three viral-ready short clips in under 10 minutes. Surfaced production-infrastructure misalignments and documented the superior migration path. Threat mitigation through briefs, audits, and communication frameworks that held the line when authority failed to.",
+    chips: ["AWS", "Flutter", "NestJS", "OAuth 2.0", "SAML", "JWT", "CloudFront", "Architecture Governance", "AI Automation"]
+  },
+  {
+    id: "justshreem",
+    period: "2024 – Present",
+    org: "JustShreem Labs",
+    title: "Product Owner · AI Layer Architect",
+    accent: "bg-indigo-accent",
+    summary: "Product ownership of a consumer mobile app from first architecture decision to live AI-integrated client surface.",
+    detail: "Held product ownership of the JustShreem app through its development lifecycle — steering the JavaScript codebase from architectural decisions through to a working demo at login and homescreen. Researched and implemented Kommunicate as the conversational AI layer. Created the GoHighLevel AI bot from zero and surfaced it on the client homepage. Maintained data integrity and strategic alignment across chaotic organisational drift through documentation, executive migration strategy, and clear communication frameworks.",
+    chips: ["Product Ownership", "Conversational AI", "Kommunicate", "GoHighLevel", "Data Integrity", "Mobile App", "AI Integration"]
+  },
+  {
+    id: "bird",
+    period: "2023 – Present",
+    org: "Billion Readers · BIRD",
+    title: "Technology Strategist · Cultural Architect",
+    accent: "bg-amber-accent",
+    summary: "Automated systems to enable cross-country scale, indigenous cultural preservation, and a contract with Indian national television.",
+    detail: "Architected and automated the operational systems that allowed Billion Readers to establish cross-country branches for subtitling — culminating in a contracting relationship with Indian national television. The FirstSongs initiative embedded AI tools including Suno to bring indigenous songs to professional audio quality, archiving them in infrastructure designed for longevity. Monthly AI skill-share sessions — consistently high engagement, concrete skill transfer — drove organisational adoption of Claude, Adobe Firefly, and Gemini, transforming how a distributed nonprofit collaborates, creates, and delivers at scale.",
+    chips: ["Systems Automation", "Indigenous Preservation", "Subtitling Infrastructure", "AI Skill-Share", "Claude", "Adobe Firefly", "Gemini", "Nonprofit Scale", "Indian National TV"]
+  }
+];
+
 function AuroraBackground() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none -z-20" aria-hidden="true">
@@ -148,7 +201,7 @@ export default function App() {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="text-center w-full"
         >
-          <h1 className="text-[clamp(72px,14vw,180px)] font-display font-light tracking-[0.25em] uppercase text-aurora leading-none ml-[0.25em]">
+          <h1 className="text-[clamp(52px,9.5vw,148px)] font-display font-light tracking-[0.14em] uppercase text-aurora leading-none w-full text-center">
             MOTADAKA
           </h1>
         </motion.div>
@@ -216,7 +269,56 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* SECTION 3: PROJECTS CAROUSEL */}
+        {/* SECTION 3: EXPERIENCE TIMELINE */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={staggerContainer}
+          className="flex flex-col gap-12"
+        >
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-display text-white">
+            Experience
+          </motion.h2>
+
+          <div className="flex flex-col gap-0">
+            {experience.map((e, i) => (
+              <motion.div
+                key={e.id}
+                variants={fadeUp}
+                className="group relative flex gap-8 pb-12 last:pb-0"
+              >
+                {/* Timeline spine */}
+                <div className="flex flex-col items-center shrink-0 w-6">
+                  <div className={`w-2.5 h-2.5 rounded-full mt-2 shrink-0 ${e.accent}`} />
+                  {i < experience.length - 1 && (
+                    <div className="w-px flex-1 bg-white/8 mt-2" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col gap-3 pb-2 flex-1">
+                  <div className="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-4">
+                    <span className="font-mono text-xs text-faint tracking-widest">{e.period}</span>
+                    <span className="font-display text-2xl md:text-3xl text-white font-light">{e.org}</span>
+                  </div>
+                  <div className="font-mono text-xs text-muted tracking-wide">{e.title}</div>
+                  <p className="font-sans text-base text-foreground leading-relaxed max-w-3xl">{e.summary}</p>
+                  <p className="font-sans text-sm text-muted leading-relaxed max-w-3xl">{e.detail}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {e.chips.map(chip => (
+                      <span key={chip} className="text-xs font-mono text-faint px-3 py-1 rounded bg-white/4 border border-white/6">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* SECTION 4: PROJECTS CAROUSEL */}
         <motion.section
           initial="hidden"
           whileInView="visible"
