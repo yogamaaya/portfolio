@@ -1,0 +1,16 @@
+given the context:
+
+https://atsabrief.lovable.app/briefs/atsa-2026-05-06
+https://justshreemlabs.lovable.app/
+
+highlight how much techinical arhcitecture i have contributed for which is approving the headspur tech stack and ensuring to keep it up to date amog all the confusing verxsions and proposals (attached), and reseacrhed and fixed on AI technology for the app (kommunicate), and then for GHL i have taken ownership of the AI bot and created it, surfaced it on client home page, and have communicated and mainated the intergral layer of devleopment effort with founders and production, and got the ball rolling for having the founder create the app [store, play](http://store.play/) store accounts
+
+[Google DocGoogle Drive File](https://docs.google.com/document/d/1h1Xe4AUZP-uk5hq2pEl2AdYB2ZsEJp5NPZOE8SX7NEY/edit?tab=t.0#heading=h.hll9h1jerw0k)
+
+i have been doing the product approval and steer heading the js app to what is now a basic demo version of the app up until logging into homescreen and i have notcied misalignment between production and actual digital infrastrcutrue but the founder "authority" has openly dismissed my calls and disregarded them and pushed me into solving the impossible: customizing GHL and creating a client user facing dashboard instead of launching what has been initally agreed upon with GHL, the basic version and staging it out in MVPs
+
+he way i did threat mitigation is by extensive documentation (the briefs) and unifying communication to emails, and documenting as standard processes on clickup, and maintaing clear feedback driven constructive criticism loops with professionally, and leading org members who have chaotic drift and task derailment by creating focus of the week doc, and doing internal audits of current website structure and proposing executive strategy for migration to a better robust infrastructure platform: GHL based on founder needs (i researched and evaluated multiple ones like skool, active campign n8n integrator models, custom builds) but maintained practicality and was sensitive to founder limitation and needs and surfaced POCs to help thrid party vendors implement required protocols of seamless UX while maintaing data integrity by being the first point of contact for risk mitigation (documenting a honey pot bot attack from form filling) and leveraging that as the pivot to GHL infrastructure
+
+i let the dysfucntion show itself and presented the better robust build for ATSA, and for JS, all my strategy has a focus on data integration and integrity, highlight these and make the portfolio not so long to read but brief and visually compelling in fade in animation display and more graphics
+
+my role is now officially recognizied as stratgey but gear it so it hits ATS and the consciousness of security architects of groundbreaking innovative tech (ai)

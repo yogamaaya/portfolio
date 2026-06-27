@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Snigdha Motadaka — Strategy &amp; Security Architecture</title>
+<meta name="description" content="Systems strategy with a security-architecture spine: cloud stack governance, AI-layer ownership, incident-driven migration, and data integrity across products at A Thousand Suns Academy and JustShreem." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0d18;
+    --ink-2:#0c1020;
+    --text:#e9edf6;
+    --muted:#9aa6c0;
+    --faint:#6b7796;
+    --line:rgba(255,255,255,.10);
+    --line-soft:rgba(255,255,255,.06);
+    --glass:rgba(255,255,255,.035);
+    --glass-2:rgba(255,255,255,.055);
+    --cyan:#34d8ee;
+    --teal:#21e6b3;
+    --violet:#a98bff;
+    --indigo:#6f76ff;
+    --amber:#ffcf6b;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --maxw:1080px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:19px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    letter-spacing:.002em;
+  }
+
+  /* ---------- liquid aurora background ---------- */
+  .liquid{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
+      radial-gradient(120% 90% at 50% -10%, #11182f 0%, var(--ink) 55%);}
+  .blob{position:absolute;border-radius:50%;filter:blur(72px);opacity:.42;mix-blend-mode:screen;will-change:transform}
+  .b1{width:62vw;height:62vw;left:-14vw;top:-12vw;background:radial-gradient(circle at 30% 30%, var(--indigo), transparent 62%);animation:drift1 30s ease-in-out infinite}
+  .b2{width:52vw;height:52vw;right:-12vw;top:6vw;background:radial-gradient(circle at 60% 40%, var(--cyan), transparent 60%);animation:drift2 34s ease-in-out infinite}
+  .b3{width:48vw;height:48vw;left:8vw;bottom:-16vw;background:radial-gradient(circle at 50% 50%, var(--teal), transparent 62%);animation:drift3 38s ease-in-out infinite}
+  .b4{width:40vw;height:40vw;right:4vw;bottom:-8vw;background:radial-gradient(circle at 50% 50%, var(--violet), transparent 60%);animation:drift1 28s ease-in-out infinite reverse}
+  @keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,5vw) scale(1.14)}}
+  @keyframes drift2{0%,100%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-7vw,4vw) scale(.9)}}
+  @keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5vw,-6vw) scale(1.12)}}
+  .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background:
+      radial-gradient(120% 120% at 50% 0%, transparent 55%, rgba(5,7,14,.7) 100%);}
+
+  /* ---------- layout ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+  section{padding:clamp(56px,9vw,118px) 0}
+
+  /* ---------- keyword aura ---------- */
+  .aura{
+    background:linear-gradient(108deg,var(--cyan),var(--violet),var(--teal),var(--cyan));
+    background-size:300% 100%;
+    -webkit-background-clip:text;background-clip:text;
+    color:transparent;-webkit-text-fill-color:transparent;
+    font-weight:600;
+    filter:drop-shadow(0 0 16px rgba(86,196,255,.34));
+    animation:auraDrift 9s ease-in-out infinite;
+  }
+  @keyframes auraDrift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:clamp(90px,16vh,170px);padding-bottom:clamp(40px,7vw,72px)}
+  .eyebrow{
+    font-family:var(--mono);font-size:13.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 14px var(--teal)}
+  h1{
+    font-family:var(--display);
+    font-size:clamp(38px,6.4vw,72px);
+    line-height:1.03;font-weight:600;letter-spacing:-.022em;
+    margin:26px 0 24px;max-width:18ch}
+  .lede{font-size:clamp(18px,2.3vw,22px);color:var(--muted);max-width:62ch;line-height:1.6}
+  .lede strong{color:var(--text);font-weight:500}
+
+  /* capability cluster */
+  .tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:38px;max-width:920px}
+  .tag{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;
+    padding:7px 13px;border-radius:999px;
+    background:var(--glass);border:1px solid var(--line);color:var(--muted);
+    transition:border-color .4s,color .4s,transform .4s}
+  .tag:hover{border-color:rgba(86,196,255,.45);color:var(--text);transform:translateY(-2px)}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- case blocks ---------- */
+  .case{
+    position:relative;
+    border:1px solid var(--line-soft);
+    background:linear-gradient(180deg,var(--glass-2),var(--glass));
+    border-radius:22px;
+    padding:clamp(28px,4vw,46px);
+    margin-bottom:24px;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    overflow:hidden}
+  .case::before{
+    content:"";position:absolute;inset:0;border-radius:22px;padding:1px;
+    background:linear-gradient(140deg,rgba(86,196,255,.30),transparent 38%,transparent 64%,rgba(169,139,255,.26));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.7}
+  .caseHead{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+  .num{font-family:var(--mono);font-size:13px;color:var(--faint);letter-spacing:.12em}
+  .ico{flex:0 0 auto;width:34px;height:34px;color:var(--cyan);filter:drop-shadow(0 0 10px rgba(52,216,238,.4))}
+  .case h2{
+    font-family:var(--display);font-weight:600;letter-spacing:-.015em;
+    font-size:clamp(23px,3.1vw,33px);line-height:1.12;margin:0 0 14px}
+  .case p{color:var(--muted);font-size:clamp(16.5px,1.9vw,19px);line-height:1.66;max-width:70ch;margin:0}
+  .case p strong{color:var(--text);font-weight:500}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{
+    font-family:var(--mono);font-size:12px;letter-spacing:.01em;
+    padding:6px 11px;border-radius:8px;
+    background:rgba(86,196,255,.07);border:1px solid rgba(86,196,255,.18);color:#bcd6ec}
+
+  /* architecture svg block */
+  .arch{margin-top:30px;border-top:1px solid var(--line-soft);padding-top:26px}
+  .arch svg{width:100%;height:auto;display:block;overflow:visible}
+  .arch .lbl{font-family:var(--mono);font-size:11.5px;fill:var(--muted);letter-spacing:.03em}
+  .arch .node{fill:rgba(255,255,255,.04);stroke:rgba(255,255,255,.18)}
+  .arch .node-acc{fill:rgba(52,216,238,.08);stroke:rgba(52,216,238,.4)}
+  .arch .ttl{font-family:var(--display);font-size:13.5px;font-weight:600;fill:var(--text)}
+  .arch .flow{stroke:rgba(169,139,255,.45);stroke-width:1.5;fill:none}
+  .arch .flowdot{fill:var(--teal)}
+
+  /* ---------- closing ---------- */
+  .close h2{font-family:var(--display);font-weight:600;letter-spacing:-.018em;
+    font-size:clamp(28px,4.4vw,46px);line-height:1.08;margin:0 0 22px;max-width:20ch}
+  .close p{color:var(--muted);font-size:clamp(17px,2vw,20px);max-width:64ch;line-height:1.66}
+  .cred{
+    margin-top:42px;padding-top:26px;border-top:1px solid var(--line-soft);
+    font-family:var(--mono);font-size:13px;color:var(--faint);line-height:1.9;letter-spacing:.02em}
+  .cred b{color:var(--muted);font-weight:500}
+
+  footer{padding:48px 0 70px;color:var(--faint);font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:560px){
+    body{font-size:18px}
+    .case{border-radius:18px}
+    .arch svg{min-width:520px}
+    .arch{overflow-x:auto}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .aura{animation:none}
+    .blob{animation:none}
+    html{scroll-behavior:auto}
+  }
+
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="liquid" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- HERO -->
+<header class="hero wrap">
+  <div class="eyebrow reveal"><span class="dot"></span>Snigdha Motadaka &nbsp;·&nbsp; Strategy &amp; Systems Architecture</div>
+  <h1 class="reveal">The <span class="aura">architecture</span>. The <span class="aura">AI&nbsp;layer</span>. The <span class="aura">data&nbsp;integrity</span>. The decisions a product is quietly built on.</h1>
+  <p class="lede reveal"><strong>Security-minded systems strategy.</strong> Across A Thousand Suns Academy and JustShreem I make the call on the cloud stack, choose and ship the conversational-AI layer, turn incidents into infrastructure decisions, and hold the line on data that stays correct and sovereign as a system scales.</p>
+
+  <div class="tags reveal" aria-label="Core competencies">
+    <span class="tag">Security Architecture</span>
+    <span class="tag">Zero-Trust IAM</span>
+    <span class="tag">OAuth 2.0 · SAML · JWT</span>
+    <span class="tag">Cloud-Native (AWS)</span>
+    <span class="tag">AI Governance</span>
+    <span class="tag">Responsible AI</span>
+    <span class="tag">Conversational AI</span>
+    <span class="tag">Data Sovereignty</span>
+    <span class="tag">Threat Mitigation</span>
+    <span class="tag">Incident Documentation</span>
+    <span class="tag">Vendor / Third-Party Risk</span>
+    <span class="tag">Platform Migration</span>
+    <span class="tag">Cross-Functional Governance</span>
+  </div>
+</header>
+
+<section class="wrap">
+
+  <!-- 01 ARCHITECTURE GOVERNANCE -->
+  <article class="case reveal">
+    <div class="caseHead">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/><path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/></svg>
+      <span class="num">01 — Architecture Governance</span>
+    </div>
+    <h2>Owning the stack decision, not just the design.</h2>
+    <p>I reviewed and approved the production cloud <strong>architecture</strong> across competing vendor proposals, then version-controlled it as the <span class="aura">single source of truth</span> through every revision so the build never drifted between meetings. The stack I govern is a single Flutter codebase fronted by an AWS Application Load Balancer, a NestJS API layer, <strong>Cognito identity</strong> with OAuth 2.0 / SAML 2.0 and JWT validation, RDS PostgreSQL for state, and an asynchronous S3 → Lambda → MediaConvert → CloudFront media pipeline.</p>
+    <div class="chips">
+      <span class="chip">10+ AWS managed services</span>
+      <span class="chip">OAuth 2.0 · SAML 2.0 · JWT</span>
+      <span class="chip">Multi-stage auth guards</span>
+      <span class="chip">iOS + Android · one codebase</span>
+      <span class="chip">~$230/mo at 1,000 users</span>
+    </div>
+
+    <div class="arch" aria-label="High-level architecture: Flutter client and admin dashboard route through an AWS load balancer to a NestJS API layer, which connects to Cognito identity, RDS PostgreSQL, and an asynchronous S3 to Lambda to MediaConvert to CloudFront media pipeline.">
+      <svg viewBox="0 0 920 200" role="img">
+        <!-- flow lines -->
+        <path class="flow" d="M150 70 H250"/>
+        <path class="flow" d="M390 70 H470"/>
+        <path class="flow" d="M610 50 H700"/>
+        <path class="flow" d="M610 90 H700"/>
+        <path class="flow" d="M330 110 V150 H470 V125"/>
+        <circle class="flowdot" cx="250" cy="70" r="3"/>
+        <circle class="flowdot" cx="470" cy="70" r="3"/>
+        <circle class="flowdot" cx="700" cy="50" r="3"/>
+        <circle class="flowdot" cx="700" cy="90" r="3"/>
+
+        <!-- client -->
+        <rect class="node" x="20" y="44" width="130" height="52" rx="9"/>
+        <text class="ttl" x="85" y="68" text-anchor="middle">Flutter App</text>
+        <text class="lbl" x="85" y="84" text-anchor="middle">iOS · Android</text>
+
+        <!-- LB -->
+        <rect class="node-acc" x="250" y="44" width="140" height="52" rx="9"/>
+        <text class="ttl" x="320" y="68" text-anchor="middle">AWS ALB</text>
+        <text class="lbl" x="320" y="84" text-anchor="middle">single entry point</text>
+
+        <!-- API -->
+        <rect class="node-acc" x="470" y="44" width="140" height="52" rx="9"/>
+        <text class="ttl" x="540" y="68" text-anchor="middle">NestJS API</text>
+        <text class="lbl" x="540" y="84" text-anchor="middle">business logic</text>
+
+        <!-- cognito -->
+        <rect class="node" x="700" y="28" width="200" height="44" rx="9"/>
+        <text class="lbl" x="800" y="55" text-anchor="middle">Cognito · IAM / JWT</text>
+
+        <!-- data + media -->
+        <rect class="node" x="700" y="72" width="200" height="44" rx="9"/>
+        <text class="lbl" x="800" y="99" text-anchor="middle">RDS PostgreSQL · state</text>
+
+        <!-- async pipeline -->
+        <rect class="node" x="470" y="125" width="430" height="46" rx="9"/>
+        <text class="lbl" x="685" y="153" text-anchor="middle">S3  →  Lambda  →  MediaConvert  →  CloudFront  (async media)</text>
+      </svg>
+    </div>
+  </article>
+
+  <!-- 02 AI LAYER -->
+  <article class="case reveal">
+    <div class="caseHead">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M4.5 7.5l2 1M17.5 15.5l2 1M4.5 16.5l2-1M17.5 8.5l2-1"/><circle cx="12" cy="12" r="4.2"/></svg>
+      <span class="num">02 — AI Layer Ownership</span>
+    </div>
+    <h2>Choosing and shipping the AI layer.</h2>
+    <p>I researched and selected the conversational-AI vendor on <span class="aura">data-sovereignty</span> grounds — an SDK mirrored to our own Postgres through a webhook so the model never became the system of record and user data stayed under our control. On the marketing platform I designed, built, and deployed the <strong>Conversation AI bot</strong> end to end, then surfaced it directly on the client home page so it shipped instead of sitting in backlog.</p>
+    <div class="chips">
+      <span class="chip">Conversational AI</span>
+      <span class="chip">AI vendor evaluation</span>
+      <span class="chip">Data sovereignty by design</span>
+      <span class="chip">Webhook → Postgres mirror</span>
+      <span class="chip">End-to-end deployment</span>
+    </div>
+  </article>
+
+  <!-- 03 THREAT / RISK -->
+  <article class="case reveal">
+    <div class="caseHead">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M12 9v4M12 16h.01"/></svg>
+      <span class="num">03 — Threat &amp; Risk Mitigation</span>
+    </div>
+    <h2>First contact on risk.</h2>
+    <p>As the first point of contact for security <span class="aura">risk</span>, I detected and documented an automated form-injection bot attack, then converted the <strong>incident</strong> into the evidence that justified migrating to a <span class="aura">hardened</span> platform. Rate-limited OTP endpoints, time-bound pre-signed upload URLs, and authenticated admin-only uploads belong to the same defensive posture — controls chosen because the threat model called for them, not by default.</p>
+    <div class="chips">
+      <span class="chip">Incident detection &amp; documentation</span>
+      <span class="chip">Bot / honeypot mitigation</span>
+      <span class="chip">Rate limiting</span>
+      <span class="chip">Pre-signed URL controls</span>
+      <span class="chip">Threat modeling</span>
+    </div>
+  </article>
+
+  <!-- 04 MIGRATION STRATEGY -->
+  <article class="case reveal">
+    <div class="caseHead">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h11M16 7l-3-3M16 7l-3 3"/><path d="M19 17H8M8 17l3-3M8 17l3 3"/></svg>
+      <span class="num">04 — Migration Strategy</span>
+    </div>
+    <h2>Letting the evidence pick the platform.</h2>
+    <p>I <span class="aura">audited</span> the existing web structure, evaluated four migration paths — Skool, ActiveCampaign, n8n integrator models, and custom builds — and authored the executive case for consolidating onto a single <span class="aura">governed</span> platform. The recommendation was sized to real founder constraints rather than the most fashionable tool, with proof-of-concept work that showed third-party vendors exactly how to keep the user experience seamless while data integrity held.</p>
+    <div class="chips">
+      <span class="chip">Vendor evaluation · 4 paths</span>
+      <span class="chip">Internal infrastructure audit</span>
+      <span class="chip">Executive recommendation</span>
+      <span class="chip">POC validation</span>
+      <span class="chip">Constraint-aware design</span>
+    </div>
+  </article>
+
+  <!-- 05 OPERATING DISCIPLINE -->
+  <article class="case reveal">
+    <div class="caseHead">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z" /><path d="M14 3v4h4M10 12h5M10 16h5M9.5 12h.01M9.5 16h.01"/></svg>
+      <span class="num">05 — Operating Discipline</span>
+    </div>
+    <h2>Documentation as a control, not an afterthought.</h2>
+    <p>When the roadmap drifted from infrastructure readiness, I held the line with <span class="aura">process</span>: I unified scattered communication into a single auditable channel, standardized workflows in ClickUp, ran a weekly focus document against task derailment, and published the executive briefings that became the team's shared record. I kept the feedback loop constructive and let the misalignment surface itself — then the <strong>documented</strong> case made the more robust architecture the obvious decision.</p>
+    <div class="chips">
+      <span class="chip">Standard operating procedures</span>
+      <span class="chip">Constructive escalation</span>
+      <span class="chip">Stakeholder alignment</span>
+      <span class="chip">Executive briefings</span>
+      <span class="chip">Audit trail</span>
+    </div>
+  </article>
+
+</section>
+
+<!-- CLOSING -->
+<section class="close wrap reveal">
+  <h2>The through-line is <span class="aura">data integrity</span>.</h2>
+  <p>The stack I approved, the AI layer I chose, the incident I escalated, the platform I argued for — every one of them protects a single property: that the data stays correct, sovereign, and trustworthy as the system grows. That is the discipline I am carrying into <strong>security architecture</strong> and <strong>AI governance</strong>.</p>
+  <div class="cred">
+    <b>Now:</b> Strategy — A Thousand Suns Academy &amp; JustShreem<br>
+    <b>Foundation:</b> B.Eng. Computer Science · University at Buffalo, SUNY · Summa Cum Laude<br>
+    <b>Next:</b> Master of Applied Cybersecurity · Canadian Institute for Cybersecurity, UNB
+  </div>
+</section>
+
+<footer class="wrap">© 2026 Snigdha Motadaka · Strategy &amp; Security Architecture</footer>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce || !('IntersectionObserver' in window)){
+      els.forEach(function(e){e.classList.add('in')});
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    },{threshold:0.16, rootMargin:'0px 0px -8% 0px'});
+    // gentle stagger for hero children
+    var hero = document.querySelectorAll('.hero .reveal');
+    hero.forEach(function(e,i){ e.style.transitionDelay = (i*0.12)+'s'; });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
+</body>
+</html>
