@@ -195,6 +195,14 @@ export default function App() {
 
       {/* HERO */}
       <section className="h-screen flex flex-col items-center justify-center px-6 relative">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          className="text-center mb-3"
+        >
+          <span className="font-sans font-light text-sm md:text-base tracking-[0.35em] text-muted/70 uppercase">Snigdha</span>
+        </motion.div>
         <motion.div 
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -210,12 +218,31 @@ export default function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 1 }}
-          className="mt-8 text-center flex flex-col items-center"
+          className="mt-8 text-center flex flex-col items-center gap-6"
         >
-          <p className="font-sans text-sm md:text-base font-normal tracking-widest text-foreground">
-            Snigdha Motadaka &nbsp;·&nbsp; Strategy · Security Architecture · Cultural Technology
-          </p>
-          <div className="w-full max-w-lg h-px bg-white/10 my-8"></div>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 max-w-3xl">
+            {[
+              "Zero Trust Architecture",
+              "AI Governance",
+              "Cloud Security",
+              "Identity & Access Management",
+              "Data Sovereignty",
+              "Threat Modeling",
+              "Security Strategy",
+              "AI Risk",
+              "OAuth 2.0 · SAML · JWT",
+              "Vendor Risk",
+              "Multimodal AI",
+              "Incident Response",
+              "Privacy-First Engineering",
+              "Systems Architecture",
+            ].map((kw) => (
+              <span key={kw} className="font-mono text-[11px] tracking-widest text-muted/80 uppercase">
+                {kw}
+              </span>
+            ))}
+          </div>
+          <div className="w-full max-w-lg h-px bg-white/10 mt-2"></div>
           <motion.div 
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
