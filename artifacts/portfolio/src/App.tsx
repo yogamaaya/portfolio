@@ -1,10 +1,55 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Volume2, VolumeX, ExternalLink } from "lucide-react";
 
+function MandelbrotCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const W = 480, H = 320;
+    canvas.width = W; canvas.height = H;
+    const maxIter = 140;
+    const cx = -0.7269, cy = 0.1889;
+    const imageData = ctx.createImageData(W, H);
+    for (let px = 0; px < W; px++) {
+      for (let py = 0; py < H; py++) {
+        const x0 = cx + (px - W / 2) / (0.26 * W);
+        const y0 = cy + (py - H / 2) / (0.26 * H);
+        let x = 0, y = 0, iter = 0;
+        while (x * x + y * y <= 4 && iter < maxIter) {
+          const t = x * x - y * y + x0;
+          y = 2 * x * y + y0; x = t; iter++;
+        }
+        const idx = (py * W + px) * 4;
+        if (iter === maxIter) {
+          imageData.data[idx + 3] = 255;
+        } else {
+          const t = iter / maxIter;
+          const s = Math.pow(t, 0.45);
+          imageData.data[idx]     = Math.floor(255 * s * s);
+          imageData.data[idx + 1] = Math.floor(60  * s * (1 - s) * 4);
+          imageData.data[idx + 2] = Math.floor(200 * s * (1 - s) * 4);
+          imageData.data[idx + 3] = Math.floor(200 * s);
+        }
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }, []);
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full object-cover"
+      style={{ opacity: 0.38, animation: "fractalZoom 22s ease-in-out infinite alternate", transformOrigin: "54% 44%" }}
+    />
+  );
+}
+
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.2, 0.7, 0.2, 1] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } }
 };
 
 const stagger = {
@@ -237,8 +282,14 @@ export default function App() {
           </motion.span>
 
           <motion.h1 variants={fadeUp}
-            className="font-display font-semibold leading-none tracking-[0.12em] uppercase text-aurora"
-            style={{ fontSize: "clamp(52px, 9.5vw, 148px)" }}>
+            className="font-display font-light leading-none tracking-[0.12em] uppercase"
+            style={{
+              fontSize: "clamp(52px, 9.5vw, 148px)",
+              color: "transparent",
+              WebkitTextStroke: "1.5px rgba(255,255,255,0.52)",
+              textShadow: "0 0 140px rgba(255,255,255,0.06), 0 0 60px rgba(52,216,238,0.12)",
+              mixBlendMode: "screen",
+            }}>
             MOTADAKA
           </motion.h1>
 
@@ -491,107 +542,170 @@ export default function App() {
             Artist
           </motion.p>
           <motion.div variants={fadeUp}>
-            <div className="relative rounded-[22px] border border-white/[0.06] overflow-hidden p-8 md:p-12"
-              style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035))" }}>
-              {/* Warm gradient border */}
+            {/* Outer card with Mandelbrot canvas bg */}
+            <div className="relative rounded-[22px] border border-white/[0.06] overflow-hidden"
+              style={{ background: "rgba(7,8,15,0.82)" }}>
+
+              {/* Mandelbrot fractal background */}
+              <MandelbrotCanvas />
+
+              {/* Dark overlay on top of fractal */}
+              <div className="absolute inset-0 rounded-[22px]"
+                style={{ background: "linear-gradient(160deg, rgba(7,8,15,0.62) 0%, rgba(7,8,15,0.78) 100%)" }} />
+
+              {/* Warm gradient border inset */}
               <div className="absolute inset-0 rounded-[22px] pointer-events-none"
                 style={{
                   padding: "1px",
-                  background: "linear-gradient(140deg, rgba(255,207,107,0.4), transparent 44%, transparent 58%, rgba(255,122,184,0.4))",
+                  background: "linear-gradient(140deg, rgba(255,207,107,0.45), transparent 44%, transparent 58%, rgba(255,122,184,0.38))",
                   WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
                   WebkitMaskComposite: "xor",
                   maskComposite: "exclude",
                 }} />
 
-              <div className="relative flex flex-col md:flex-row gap-10 md:gap-16 items-start">
-                <div className="flex-1">
-                  <h3 className="font-display font-semibold text-[clamp(32px,5vw,54px)] leading-[1.0] mb-4"
-                    style={{
-                      background: "linear-gradient(108deg, #ffcf6b, #ff7ab8, #ffcf6b)",
-                      backgroundSize: "300% 100%",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                      animation: "auraDrift 9s ease-in-out infinite",
-                    }}>
-                    Snieaks
-                  </h3>
-                  <p className="text-[clamp(16px,1.85vw,18px)] text-[#a3aec5] leading-[1.72] max-w-[52ch] mb-6 font-sans">
-                    Singer, songwriter, producer. Released across Spotify, Apple Music, YouTube, and every major streaming platform. The Snieaks digital universe at <a href="https://spandance.replit.app" target="_blank" rel="noopener noreferrer" className="text-[#edf0f7] hover:text-[#ffcf6b] transition-colors no-underline">spandance.replit.app</a> is a custom-built interactive experience: fractal Mandelbrot zoom animations, particle colour effects, and a visual identity built from the same architectural instinct as everything else.
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    <a href="https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl"
-                      target="_blank" rel="noopener noreferrer"
-                      data-testid="link-spotify"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[#1DB954] hover:-translate-y-[2px]"
-                      style={{ background: "rgba(255,255,255,0.035)" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                      Spotify
-                    </a>
-                    <a href="https://www.youtube.com/@snieaks"
-                      target="_blank" rel="noopener noreferrer"
-                      data-testid="link-youtube"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[#FF0000] hover:-translate-y-[2px]"
-                      style={{ background: "rgba(255,255,255,0.035)" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                      YouTube
-                    </a>
-                    <a href="https://spandance.replit.app"
-                      target="_blank" rel="noopener noreferrer"
-                      data-testid="link-snieaks-site"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[rgba(255,207,107,0.5)] hover:-translate-y-[2px]"
-                      style={{ background: "rgba(255,255,255,0.035)" }}>
-                      <ExternalLink size={14} strokeWidth={1.5} />
-                      The Experience
-                    </a>
-                  </div>
-                </div>
+              {/* Content */}
+              <div className="relative z-10 p-8 md:p-12 flex flex-col gap-8">
 
-                {/* Decorative visual */}
-                <div className="shrink-0 w-[180px] h-[180px] md:w-[220px] md:h-[220px] rounded-2xl overflow-hidden relative"
-                  style={{ background: "linear-gradient(135deg, rgba(255,207,107,0.15), rgba(255,122,184,0.15))", border: "1px solid rgba(255,207,107,0.2)" }}>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="font-display font-semibold text-[56px] leading-none tracking-widest"
+                {/* Top: image + title + copy */}
+                <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+                  {/* Spotify artist photo */}
+                  <div className="shrink-0">
+                    <img
+                      src="https://i.scdn.co/image/ab676161000051743e361fd971f5a6e6c9c14180"
+                      alt="Snieaks"
+                      className="w-[130px] h-[130px] md:w-[160px] md:h-[160px] rounded-2xl object-cover"
+                      style={{ border: "1px solid rgba(255,207,107,0.28)", boxShadow: "0 0 40px rgba(255,207,107,0.14)" }}
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <h3 className="font-display font-semibold text-[clamp(32px,5vw,54px)] leading-[1.0] mb-3"
                       style={{
-                        background: "linear-gradient(108deg, #ffcf6b, #ff7ab8)",
+                        background: "linear-gradient(108deg, #ffcf6b, #ff7ab8, #ffcf6b)",
+                        backgroundSize: "300% 100%",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
+                        animation: "auraDrift 9s ease-in-out infinite",
                       }}>
-                      S
+                      Snieaks
+                    </h3>
+                    <p className="text-[clamp(16px,1.85vw,18px)] text-[#a3aec5] leading-[1.76] max-w-[54ch] mb-6 font-sans">
+                      The accumulation of multiple theories of everything. Songs released across Spotify, Apple Music, and YouTube — and a living home at{" "}
+                      <a href="https://snieaks.com" target="_blank" rel="noopener noreferrer"
+                        className="text-[#edf0f7] hover:text-[#ffcf6b] transition-colors no-underline border-b border-white/20 hover:border-[#ffcf6b]/60">
+                        snieaks.com
+                      </a>
+                      {" "}where the universe inside the music renders live in the browser. Fractal worlds. Sound that holds the whole thing.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <a href="https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl"
+                        target="_blank" rel="noopener noreferrer"
+                        data-testid="link-spotify"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[#1DB954] hover:-translate-y-[2px]"
+                        style={{ background: "rgba(255,255,255,0.05)" }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                        Spotify
+                      </a>
+                      <a href="https://www.youtube.com/@snieaks"
+                        target="_blank" rel="noopener noreferrer"
+                        data-testid="link-youtube"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[#FF0000] hover:-translate-y-[2px]"
+                        style={{ background: "rgba(255,255,255,0.05)" }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        YouTube
+                      </a>
+                      <a href="https://snieaks.com"
+                        target="_blank" rel="noopener noreferrer"
+                        data-testid="link-snieaks-site"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[rgba(255,207,107,0.5)] hover:-translate-y-[2px]"
+                        style={{ background: "rgba(255,255,255,0.05)" }}>
+                        <ExternalLink size={14} strokeWidth={1.5} />
+                        snieaks.com
+                      </a>
                     </div>
                   </div>
-                  <div className="absolute inset-0 rounded-2xl"
-                    style={{ background: "radial-gradient(circle at 30% 30%, rgba(255,207,107,0.2), transparent 60%)" }} />
                 </div>
+
+                {/* snieaks.com embedded */}
+                <div className="rounded-[14px] overflow-hidden border border-white/[0.07]"
+                  style={{ background: "#000" }}>
+                  <div className="text-[11px] tracking-[0.12em] uppercase text-[#727e9c] font-sans px-4 py-2.5 border-b border-white/[0.06] flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#ffcf6b]/60" />
+                    snieaks.com — live
+                  </div>
+                  <iframe
+                    src="https://snieaks.com"
+                    title="Snieaks"
+                    className="w-full"
+                    style={{ height: "420px", border: "none", display: "block" }}
+                    allow="autoplay; encrypted-media"
+                  />
+                </div>
+
               </div>
             </div>
           </motion.div>
         </motion.section>
 
-        {/* CLOSING PRINCIPLES */}
+        {/* CLOSING — A LIVING PARADOX */}
         <motion.section
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
-          className="flex flex-col items-center text-center gap-10 pb-8"
+          className="flex flex-col gap-14 pb-8"
         >
-          <motion.h2 variants={fadeUp}
-            className="font-display font-semibold italic text-[clamp(28px,4vw,46px)] leading-[1.08] max-w-[22ch]">
-            Speed and quality. Integrity on both sides. Every time.
-          </motion.h2>
+          <div className="flex flex-col items-center text-center gap-5">
+            <motion.p variants={fadeUp} className="text-[12px] tracking-[0.26em] uppercase text-[#a98bff] font-sans font-medium">
+              The Thread
+            </motion.p>
+            <motion.h2 variants={fadeUp}
+              className="font-display font-semibold italic text-[clamp(30px,4.5vw,52px)] leading-[1.06] max-w-[18ch]"
+              style={{
+                background: "linear-gradient(120deg, #edf0f7 0%, #a98bff 48%, #34d8ee 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
+              A living paradox.
+            </motion.h2>
+            <motion.p variants={fadeUp}
+              className="text-[clamp(16px,1.85vw,19px)] text-[#a3aec5] leading-[1.78] max-w-[60ch] font-sans text-center">
+              A security architect who writes the music that plays on the internet. A keeper of ancient and esoteric wisdom who governs the cloud infrastructure that carries it. A specialist in the quality of what machines are taught to see, who also builds the tools that preserve what human eyes once feared would be lost forever.
+            </motion.p>
+            <motion.p variants={fadeUp}
+              className="text-[clamp(15px,1.7vw,17px)] text-[#727e9c] leading-[1.80] max-w-[58ch] font-sans text-center">
+              The rarest things cannot coexist — except they do, here, in one body of work. Speed and quality. Precision and feeling. The frontier of what is possible and the depth of what has always been true. A financial institution and a fractal. An indigenous song and a language model. A change governance framework and a song about the void.
+            </motion.p>
+            <motion.p variants={fadeUp}
+              className="font-display font-semibold italic text-[clamp(18px,2.2vw,24px)] text-[#edf0f7]/70 max-w-[36ch] text-center">
+              The thread is not contradiction. It is the accumulation of multiple theories of everything, held by one standard: integrity — in the data, in the systems, in the people on either side of every decision.
+            </motion.p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-left">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
             {[
-              { label: "Speed + Quality", body: "The rarest combination in systems work. Every build here delivers both.", color: "#34d8ee" },
-              { label: "Security First", body: "Zero-trust principles, data sovereignty, and incident governance — standard, not optional.", color: "#a98bff" },
-              { label: "Cultural Integrity", body: "Indigenous songs, esoteric wisdom, global literacy — technology in service of what matters.", color: "#21e6b3" },
+              {
+                label: "Precision + Poetry",
+                body: "The same mind that validates what a machine learns to see also writes the music that plays when you close your eyes. These are not opposites. They are the same impulse.",
+                color: "#34d8ee",
+              },
+              {
+                label: "Ancient + Emergent",
+                body: "Cloud infrastructure in service of esoteric wisdom. AI tools in service of indigenous songs. The newest thing preserving the oldest. The boundary between them is where the work lives.",
+                color: "#a98bff",
+              },
+              {
+                label: "Scale + Soul",
+                body: "Systems that reach national television and frontier AI labs. Tools that give a single team member three weeks of their life back. Both matter. Neither is more important than the other.",
+                color: "#21e6b3",
+              },
             ].map((c, i) => (
               <motion.div key={i} variants={fadeUp}
                 className="rounded-[18px] p-7 flex flex-col gap-3 border border-white/[0.06]"
-                style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035))" }}>
-                <div className="w-[6px] h-[6px] rounded-full" style={{ background: c.color }} />
-                <h4 className="font-display font-semibold text-xl text-[#edf0f7]">{c.label}</h4>
-                <p className="text-[14px] text-[#727e9c] leading-relaxed font-sans">{c.body}</p>
+                style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03))" }}>
+                <div className="w-[6px] h-[6px] rounded-full shrink-0" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}88` }} />
+                <h4 className="font-display font-semibold text-[20px] text-[#edf0f7] leading-snug">{c.label}</h4>
+                <p className="text-[13.5px] text-[#727e9c] leading-[1.68] font-sans">{c.body}</p>
               </motion.div>
             ))}
           </div>
