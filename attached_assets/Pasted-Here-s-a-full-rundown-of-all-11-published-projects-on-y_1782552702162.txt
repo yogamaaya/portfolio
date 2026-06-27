@@ -1,0 +1,119 @@
+Here's a full rundown of all **11 published projects** on your Replit account:
+
+-
+
+---
+
+### 1. Snieaks.com
+
+**Live:** [spandance.replit.app](https://spandance.replit.app)
+
+**What it does:** An artistic/interactive web experience called "The Experience." Features intro animations, a video player with autoplay and mobile rotation, Mandelbrot fractal zoom animations with particle colour effects, and a legal/copyright notice page for the "Snieaks" brand.
+
+
+
+This needs to talk about my singer persona on spotify and every other major record label, which I am on as snieaks, so research that and dig it up and present me as a pop star for this carousel card (youtube also is snieaks), highlight a song if needed and make it playable
+
+---
+
+### 3. Drive Transcriber
+
+**Live:** [drivetranscribe.replit.app](https://drivetranscribe.replit.app)
+
+**What it does:** A Google Drive video transcription workflow. It authenticates with Google Drive via OAuth 2.0, watches a folder for video/audio files, runs transcription jobs on them, and saves the transcripts back to Drive. Has a database for tracking job progress.
+
+
+
+this was made to cut down shorts rpdocution for ATSA by hours to go from event recording to shorts through automation: auto transcribe, auto pick viral moments, and send off to editor (does trasncription in 1 less than 10 mins for 3 high outreach viral shorts of deep esoteric content)
+
+---
+
+### 4. OCR Screenshot Import
+
+**Live:** [textract.replit.app](https://textract.replit.app)
+
+**What it does:** Upload a screenshot or image and extract all the text from it using both AI vision OCR and Tesseract OCR. Also includes text formatting tools for case conversion (Proper Case, UPPER, lower, etc.).
+
+
+
+for the transcirpion pipeline to ensure quality and integrity of text
+
+---
+
+### 5. ChimeScheduler
+
+**Live:** [tuime.replit.app](https://tuime.replit.app)
+
+**What it does:** An interval timer app with customisable chimes. You can Start, Stop, Resume, and Reset sessions — timestamps are tracked with colour-coded labels (green = started, orange = stopped) and persist across page refreshes via localStorage.
+
+
+
+built this for the team to help track their hours and help them stay organized
+
+---
+
+### 6. Video Freeze Frame
+
+**Live:** [video-freeze-frame.replit.app](https://video-freeze-frame.replit.app)
+
+**What it does:** A browser-based tool to capture still frames from any video at full native resolution and download them as lossless PNG files. Runs entirely client-side — videos are never uploaded to a server.
+
+
+
+built for the production team to make seamless videos 
+
+---
+
+### 7. Speed Reader
+
+**Live:** [speead.replit.app](https://speead.replit.app)
+
+**What it does:** A speed reading app (RSVP-style) that flashes text word-by-word at a focal letter in the centre of the screen. You can paste text or fetch from a URL. Designed for improved reading speed and focus with an elegant font experience.
+
+
+
+built for helping anyone improve their reading skills, relevenat for my BIRD identity of subtitling and thier mission of literacy
+
+---
+
+### 9. kleam
+
+**Live:** [kleam.replit.app](https://kleam.replit.app) / [kleam.ai](https://kleam.ai) *(custom domain)*
+
+**What it does:** An AI platform featuring a "Deliberation Arena" where users interact with AI personas ("geniuses"). It has a landing page with fractal animations, a subscription/checkout flow via Stripe, and a playground experience. The most polished project — with its own `.ai` domain.
+
+
+
+this has cross linking of multiple ai models, highlight this one after snieaks
+
+---
+
+### 10. QuotePicMaker
+
+**Live:** [imageni.replit.app](https://imageni.replit.app)
+
+**What it does:** A tool to create stylised quote images. Enter a quote and customise font, text colour, and layout — then download the result as an image. Uses canvas-based rendering with Lato font.
+
+
+
+built this for devipuram.org which cut down their production of social media content creation from 3 weeks to 3 hours
+
+
+
+highlight them in such a way so that they make clear storytelling (scrollytelling) sense
+
+
+
+and then weave the inherent common thread as me being a genius architect of systems that are increibly efficeint in terms of speed and quality! which is super rare to have both, and also the managerial traits of building tools for the teeam, enriching an org and its throughput and helping org with evolution and adaptation to techonology and redefining work and processes and ethics 
+
+
+
+i want to be positined as a genius architect who kNOWS how to interact with technology and makes it productive and tangible with higher societal impacts that help positively with impriving literacy, oreserving indigenous cultures (my work at bird called firstsongs which is recording indegeius songs and preserving them on the site, and using tech like Suno to professional grade these songs), and security first princples so it is hitting the target audience of cybersecuity technology architect heads, ethics and governance, and national cultural preservation eyes
+
+
+
+make this epic please, my one stop shop for who motadaka is, what her impact has been (which is quite large) 
+
+
+
+do more research as needed to really establish the narartive with the theems of indegeinous nature based culture preservatio and integrating technology to do that (atsa is also knoweldge preservation work and knoweldge exposure of esoteric teaching ancient wisdom through modern infrastrtcure) and i am the authority of product ownership of such infrastructure making stratgetic decisions that are security driven and efficeincy optimized 

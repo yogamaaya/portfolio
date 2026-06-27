@@ -1,0 +1,67 @@
+Here's a full rundown of all **11 published projects** on your Replit account:
+
+---
+
+### 1. Email Sender System
+**Live:** [feednb.replit.app](https://feednb.replit.app)
+**What it does:** A job market monitoring and email digest system ("NB AIP Job Monitor"). It tracks NOC/TEER job codes, monitors immigration category streams, and sends scheduled email digests with stats and insights. Has a dashboard with clickable stat cards. Currently being republished.
+
+---
+
+### 2. Web Experience Design
+**Live:** [spandance.replit.app](https://spandance.replit.app)
+**What it does:** An artistic/interactive web experience called "The Experience." Features intro animations, a video player with autoplay and mobile rotation, Mandelbrot fractal zoom animations with particle colour effects, and a legal/copyright notice page for the "Snieaks" brand.
+
+---
+
+### 3. Drive Transcriber
+**Live:** [drivetranscribe.replit.app](https://drivetranscribe.replit.app)
+**What it does:** A Google Drive video transcription workflow. It authenticates with Google Drive via OAuth 2.0, watches a folder for video/audio files, runs transcription jobs on them, and saves the transcripts back to Drive. Has a database for tracking job progress.
+
+---
+
+### 4. OCR Screenshot Import
+**Live:** [textract.replit.app](https://textract.replit.app)
+**What it does:** Upload a screenshot or image and extract all the text from it using both AI vision OCR and Tesseract OCR. Also includes text formatting tools for case conversion (Proper Case, UPPER, lower, etc.).
+
+---
+
+### 5. ChimeScheduler
+**Live:** [tuime.replit.app](https://tuime.replit.app)
+**What it does:** An interval timer app with customisable chimes. You can Start, Stop, Resume, and Reset sessions — timestamps are tracked with colour-coded labels (green = started, orange = stopped) and persist across page refreshes via localStorage.
+
+---
+
+### 6. Video Freeze Frame
+**Live:** [video-freeze-frame.replit.app](https://video-freeze-frame.replit.app)
+**What it does:** A browser-based tool to capture still frames from any video at full native resolution and download them as lossless PNG files. Runs entirely client-side — videos are never uploaded to a server.
+
+---
+
+### 7. Speed Reader
+**Live:** [speead.replit.app](https://speead.replit.app)
+**What it does:** A speed reading app (RSVP-style) that flashes text word-by-word at a focal letter in the centre of the screen. You can paste text or fetch from a URL. Designed for improved reading speed and focus with an elegant font experience.
+
+---
+
+### 8. snieaks.zip
+**Live:** [snieaks.replit.app](https://snieaks.replit.app)
+**What it does:** A static HTML landing page for the "Snieaks" brand — a dark-themed, visually branded site hosted as a simple static deployment.
+
+---
+
+### 9. kleam
+**Live:** [kleam.replit.app](https://kleam.replit.app) / [kleam.ai](https://kleam.ai) *(custom domain)*
+**What it does:** An AI platform featuring a "Deliberation Arena" where users interact with AI personas ("geniuses"). It has a landing page with fractal animations, a subscription/checkout flow via Stripe, and a playground experience. The most polished project — with its own `.ai` domain.
+
+---
+
+### 10. QuotePicMaker
+**Live:** [imageni.replit.app](https://imageni.replit.app)
+**What it does:** A tool to create stylised quote images. Enter a quote and customise font, text colour, and layout — then download the result as an image. Uses canvas-based rendering with Lato font.
+
+---
+
+### 11. youtube *(suspended)*
+**Domain:** [webcheck.replit.app](https://webcheck.replit.app) — **⚠️ currently suspended** (requires an active Core membership to resume)
+**What it does:** A keyword statistics and Google Trends visualisation tool. Search for keywords and see trend data and analytics presented via Chart.js — useful for researching how topics are trending across the internet.
