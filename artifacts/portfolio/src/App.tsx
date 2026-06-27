@@ -83,11 +83,11 @@ const staggerContainer = {
 
 const domains = [
   { num: "11", label: "systems shipped", desc: "End-to-end products live in the world." },
-  { num: "3", label: "organisations transformed", desc: "A Thousand Suns Academy. JustShreem Labs. Billion Readers." },
+  { num: "5", label: "organisations transformed", desc: "M&T Bank. A Thousand Suns Academy. JustShreem Labs. Billion Readers. devipuram.org." },
   { num: "7×", label: "speed uplift", desc: "The rarest thing: quality and velocity in the same body of work." },
   { num: "0", label: "data breaches", desc: "Security-first architecture. Every time." },
-  { num: "Monthly", label: "AI skill-share sessions", desc: "High engagement. Concrete skill transfer. Organisations adapting." },
-  { num: "Indian National TV", label: "contracting milestone", desc: "Scalable subtitling infrastructure. Billion Readers." }
+  { num: "2", label: "frontier AI companies", desc: "Data quality assurance for text-to-vision model training at Meta and OpenAI." },
+  { num: "3 wks → 3 hrs", label: "content pipeline", desc: "Social media production transformed at devipuram.org through a single tool." },
 ];
 
 const projects = [
@@ -245,7 +245,7 @@ export default function App() {
         >
           {domains.map((d, i) => (
             <motion.div key={i} variants={fadeUp} className="glass-card rounded-xl p-8 flex flex-col gap-4">
-              <div className="text-5xl md:text-6xl font-display text-white">{d.num}</div>
+              <div className="text-5xl md:text-6xl font-sans font-light text-white tracking-tight">{d.num}</div>
               <div className="font-mono text-xs uppercase tracking-wider text-muted">{d.label}</div>
               <p className="font-sans text-sm md:text-base text-foreground mt-2 leading-relaxed">{d.desc}</p>
             </motion.div>
