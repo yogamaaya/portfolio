@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "C6a03B34xwtmcPzGz2wxQ"
+uri = "file://artifacts/portfolio/public/motadaka-portfolio.html"
+type = "unspecified"
+title = "Motadaka Portfolio — Standalone HTML"
+description = "Self-contained single-file version of the full portfolio. Open in any browser — no server needed. Includes all animations, the Mandelbrot canvas, YouTube hero, project cards, Snieaks section, and the living paradox closing."

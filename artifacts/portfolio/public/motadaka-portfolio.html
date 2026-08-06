@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Motadaka — Strategy · Security Architecture · AI Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #07080f;
+    --fg: #edf0f7;
+    --muted: #a3aec5;
+    --faint: #727e9c;
+    --cyan: #34d8ee;
+    --teal: #21e6b3;
+    --violet: #a98bff;
+    --indigo: #6f76ff;
+    --amber: #ffcf6b;
+    --rose: #ff7ab8;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-sans: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* ── AURORA BLOBS ── */
+  .aurora {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  }
+  .blob {
+    position: absolute; border-radius: 50%;
+    mix-blend-mode: screen; animation: blob 30s infinite;
+  }
+  @keyframes blob {
+    0%   { transform: translate(0,0) scale(1); }
+    33%  { transform: translate(30px,-50px) scale(1.1); }
+    66%  { transform: translate(-20px,20px) scale(0.9); }
+    100% { transform: translate(0,0) scale(1); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 40;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(11px);
+    background: linear-gradient(180deg, rgba(7,8,15,0.82), rgba(7,8,15,0.32));
+  }
+  .nav-inner {
+    max-width: 1080px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.2rem; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 12px var(--teal);
+    display: inline-block; flex-shrink: 0;
+  }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a {
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--fg); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; overflow: hidden;
+  }
+  .hero-video-wrap {
+    position: absolute; inset: 0; overflow: hidden;
+  }
+  .hero-video-wrap iframe {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: max(100%, 177.78vh); height: max(100%, 56.25vw);
+    border: none; pointer-events: none;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0; background: rgba(7,8,15,0.62);
+  }
+  .hero-overlay-grad {
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 120% at 50% 0%, transparent 52%, rgba(5,7,14,0.82) 100%);
+  }
+  .hero-text {
+    position: relative; z-index: 10; text-align: center;
+    padding: 0 24px; display: flex; flex-direction: column;
+    align-items: center; gap: 20px;
+    animation: fadeUp 1s ease both;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-sans); font-weight: 300;
+    font-size: 12px; letter-spacing: 0.38em; text-transform: uppercase;
+    color: rgba(163,174,197,0.8);
+  }
+  .hero-h1 {
+    font-family: var(--font-display); font-weight: 300;
+    line-height: 1; letter-spacing: 0.12em; text-transform: uppercase;
+    font-size: clamp(52px, 9.5vw, 148px);
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.52);
+    text-shadow: 0 0 140px rgba(255,255,255,0.06), 0 0 60px rgba(52,216,238,0.12);
+    mix-blend-mode: screen;
+  }
+  .hero-sub {
+    font-family: var(--font-sans); font-weight: 300;
+    font-size: 1rem; letter-spacing: 0.14em; color: rgba(163,174,197,0.9);
+  }
+  .hero-arrow {
+    color: rgba(255,255,255,0.3); font-size: 1.2rem; margin-top: 16px;
+    animation: bounce 2.2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+  .sound-btn {
+    position: absolute; bottom: 32px; right: 32px; z-index: 20;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05); backdrop-filter: blur(6px);
+    color: var(--muted); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer;
+    transition: color 0.3s, border-color 0.3s;
+    font-family: var(--font-sans);
+  }
+  .sound-btn:hover { color: var(--fg); border-color: rgba(255,255,255,0.2); }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1080px; margin: 0 auto;
+    padding: 0 24px 128px;
+    display: flex; flex-direction: column; gap: 128px;
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    font-family: var(--font-sans); font-weight: 500;
+    font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 16px;
+  }
+  .section-label.amber { color: var(--amber); }
+  .section-label.violet { color: var(--violet); }
+
+  /* ── STATS ── */
+  #work { padding-top: 80px; }
+  .stats-h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(30px,4.6vw,50px); line-height: 1.04;
+    margin-bottom: 40px; max-width: 20ch;
+  }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(2,1fr); gap: 12px;
+  }
+  @media (min-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(4,1fr); }
+  }
+  .stat-card {
+    border-radius: 18px; padding: 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035));
+    transition: border-color 0.3s, transform 0.3s; cursor: default;
+  }
+  .stat-card:hover { border-color: rgba(52,216,238,0.4); transform: translateY(-4px); }
+  .stat-num {
+    font-family: var(--font-sans); font-weight: 300; line-height: 1;
+    font-size: clamp(34px,4.5vw,52px); margin-bottom: 4px;
+    background: linear-gradient(120deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500;
+  }
+  .stat-desc { font-size: 13px; color: var(--faint); line-height: 1.6; margin-top: 4px; }
+
+  /* ── NARRATIVE ── */
+  .narrative { max-width: 720px; }
+  .narrative-body {
+    display: flex; flex-direction: column; gap: 24px;
+    font-size: clamp(17px,1.9vw,19px); color: var(--muted); line-height: 1.72;
+  }
+  .narrative-body strong { color: var(--fg); font-weight: 600; }
+
+  /* ── TIMELINE ── */
+  .timeline-h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(28px,4vw,46px); line-height: 1.04; margin-bottom: 48px;
+  }
+  .timeline-wrap { position: relative; padding-left: 32px; }
+  .timeline-spine {
+    position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px;
+    opacity: 0.5; border-radius: 2px;
+    background: linear-gradient(180deg, var(--cyan), var(--violet), var(--teal), var(--rose));
+  }
+  .timeline-items { display: flex; flex-direction: column; gap: 32px; }
+  .timeline-item { position: relative; }
+  .timeline-dot {
+    position: absolute; left: -32px; top: 34px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--bg); border: 2px solid;
+  }
+  .exp-card {
+    border-radius: 20px; border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(6px); overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035));
+    padding: 28px 36px;
+  }
+  .exp-meta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .exp-period {
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .exp-role {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--faint);
+  }
+  .exp-org {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(24px,3.2vw,36px); line-height: 1.05; margin-bottom: 16px;
+  }
+  .exp-body {
+    font-size: clamp(15px,1.7vw,17px); color: var(--muted);
+    line-height: 1.72; margin-bottom: 20px; max-width: 64ch;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12px; padding: 6px 13px; border-radius: 999px;
+    color: #cfe2f1;
+    background: rgba(86,196,255,0.07); border: 1px solid rgba(86,196,255,0.18);
+  }
+
+  /* ── BUILDS ── */
+  .builds-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between; margin-bottom: 12px;
+  }
+  .carousel-btns { display: flex; gap: 8px; }
+  .carousel-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.035);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--fg); cursor: pointer; font-size: 18px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .carousel-btn:hover {
+    border-color: rgba(52,216,238,0.5); background: rgba(255,255,255,0.05);
+  }
+  .builds-h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(28px,4vw,46px); line-height: 1.04; margin-bottom: 32px;
+  }
+  .carousel {
+    display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .proj-card {
+    flex-shrink: 0; width: min(300px, 80vw);
+    scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 12px;
+    border-radius: 16px; border: 1px solid rgba(255,255,255,0.06);
+    padding: 20px; cursor: pointer; text-align: left;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035));
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .proj-card:hover { transform: translateY(-3px); border-color: rgba(52,216,238,0.4); }
+  .proj-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .proj-title {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.2rem; color: var(--fg); letter-spacing: -0.005em;
+  }
+  .proj-wave {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px;
+  }
+  .proj-impact { font-size: 13.5px; color: var(--muted); line-height: 1.55; flex: 1; }
+  .proj-more { font-size: 12px; color: var(--faint); letter-spacing: 0.04em; margin-top: 4px; }
+  .proj-expanded {
+    display: none; margin-top: 12px; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.06); padding: 28px 40px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035));
+  }
+  .proj-expanded.open { display: block; }
+  .proj-expanded-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; border-radius: 20px 20px 0 0; opacity: 0.6;
+  }
+  .proj-expanded-header {
+    display: flex; flex-wrap: wrap; gap: 12px 24px;
+    align-items: flex-start; margin-bottom: 20px;
+  }
+  .proj-expanded-title {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(26px,3.4vw,38px); line-height: 1.05;
+  }
+  .proj-expanded-link {
+    font-size: 13px; color: var(--muted); margin-top: 4px; flex-shrink: 0;
+    transition: color 0.3s;
+  }
+  .proj-expanded-link:hover { color: var(--fg); }
+  .proj-narrative {
+    font-size: clamp(16px,1.85vw,18px); color: var(--muted);
+    line-height: 1.72; max-width: 64ch; margin-bottom: 24px;
+  }
+  .proj-chips { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .proj-chip {
+    font-size: 12px; padding: 6px 12px; border-radius: 6px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* ── ARTIST ── */
+  .artist-card {
+    position: relative; border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden; background: rgba(7,8,15,0.82);
+  }
+  .artist-fractal-overlay {
+    position: absolute; inset: 0; border-radius: 22px;
+    background: linear-gradient(160deg, rgba(7,8,15,0.62) 0%, rgba(7,8,15,0.78) 100%);
+  }
+  .artist-border-inset {
+    position: absolute; inset: 0; border-radius: 22px; pointer-events: none;
+    padding: 1px;
+    background: linear-gradient(140deg, rgba(255,207,107,0.45), transparent 44%, transparent 58%, rgba(255,122,184,0.38));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+  }
+  .artist-content {
+    position: relative; z-index: 10; padding: 48px;
+    display: flex; flex-direction: column; gap: 32px;
+  }
+  .artist-top {
+    display: flex; flex-direction: column; gap: 32px;
+  }
+  @media (min-width: 768px) { .artist-top { flex-direction: row; gap: 48px; align-items: flex-start; } }
+  .artist-photo {
+    width: 130px; height: 130px; border-radius: 16px; object-fit: cover; flex-shrink: 0;
+    border: 1px solid rgba(255,207,107,0.28);
+    box-shadow: 0 0 40px rgba(255,207,107,0.14);
+  }
+  @media (min-width: 768px) { .artist-photo { width: 160px; height: 160px; } }
+  .artist-name {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(32px,5vw,54px); line-height: 1; margin-bottom: 12px;
+    background: linear-gradient(108deg, var(--amber), var(--rose), var(--amber));
+    background-size: 300% 100%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; animation: auraDrift 9s ease-in-out infinite;
+  }
+  @keyframes auraDrift {
+    0%,100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .artist-desc {
+    font-size: clamp(16px,1.85vw,18px); color: var(--muted);
+    line-height: 1.76; max-width: 54ch; margin-bottom: 24px;
+  }
+  .artist-desc a { color: var(--fg); border-bottom: 1px solid rgba(255,255,255,0.2); transition: color 0.3s, border-color 0.3s; }
+  .artist-desc a:hover { color: var(--amber); border-color: rgba(255,207,107,0.6); }
+  .artist-links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .artist-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 11px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    font-size: 13.5px; font-weight: 500; color: var(--fg);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .artist-link:hover { transform: translateY(-2px); }
+  .artist-link.spotify:hover { border-color: #1DB954; }
+  .artist-link.youtube:hover { border-color: #FF0000; }
+  .artist-link.site:hover { border-color: rgba(255,207,107,0.5); }
+  .artist-iframe-wrap {
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.07); background: #000;
+  }
+  .artist-iframe-bar {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint); padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .artist-iframe-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: rgba(255,207,107,0.6);
+  }
+  .artist-iframe-wrap iframe {
+    width: 100%; height: 420px; border: none; display: block;
+  }
+
+  /* ── MANDELBROT canvas ── */
+  #mandelbrot-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.38;
+    animation: fractalZoom 22s ease-in-out infinite alternate;
+    transform-origin: 54% 44%;
+  }
+  @keyframes fractalZoom {
+    0%   { transform: scale(1) translate(0,0); }
+    50%  { transform: scale(2.4) translate(-4%,2%); }
+    100% { transform: scale(4.2) translate(-2%,-3%); }
+  }
+
+  /* ── PARADOX / CLOSING ── */
+  .closing { display: flex; flex-direction: column; gap: 56px; padding-bottom: 32px; }
+  .closing-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+  .closing-h2 {
+    font-family: var(--font-display); font-weight: 600; font-style: italic;
+    font-size: clamp(30px,4.5vw,52px); line-height: 1.06; max-width: 18ch;
+    background: linear-gradient(120deg, var(--fg) 0%, var(--violet) 48%, var(--cyan) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .closing-p1 {
+    font-size: clamp(16px,1.85vw,19px); color: var(--muted);
+    line-height: 1.78; max-width: 60ch;
+  }
+  .closing-p2 {
+    font-size: clamp(15px,1.7vw,17px); color: var(--faint);
+    line-height: 1.80; max-width: 58ch;
+  }
+  .closing-quote {
+    font-family: var(--font-display); font-weight: 600; font-style: italic;
+    font-size: clamp(18px,2.2vw,24px); color: rgba(237,240,247,0.7);
+    max-width: 36ch;
+  }
+  .paradox-grid {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+  }
+  @media (min-width: 768px) { .paradox-grid { grid-template-columns: repeat(3,1fr); } }
+  .paradox-card {
+    border-radius: 18px; padding: 28px;
+    display: flex; flex-direction: column; gap: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03));
+  }
+  .paradox-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .paradox-title {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 20px; color: var(--fg); line-height: 1.2;
+  }
+  .paradox-body { font-size: 13.5px; color: var(--faint); line-height: 1.68; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 24px;
+  }
+  .footer-inner {
+    max-width: 1080px; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+  }
+  @media (min-width: 768px) {
+    .footer-inner { flex-direction: row; justify-content: space-between; }
+  }
+  .footer-logo {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.1rem; letter-spacing: 0.1em; color: var(--fg);
+  }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-links a {
+    font-size: 12.5px; color: var(--faint); letter-spacing: 0.04em;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--fg); }
+  .footer-copy { font-size: 12px; color: var(--faint); }
+
+  /* ── FADE UP ANIMATION (generic, triggered on scroll) ── */
+  .fade-up {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- AURORA BLOBS -->
+<div class="aurora" aria-hidden="true">
+  <div class="blob" style="top:-12vw;left:-14vw;width:60vw;height:60vw;filter:blur(76px);opacity:0.40;background:radial-gradient(circle at 30% 30%,#6f76ff,transparent 62%);animation-duration:30s;"></div>
+  <div class="blob" style="top:4vw;right:-12vw;width:52vw;height:52vw;filter:blur(76px);opacity:0.40;background:radial-gradient(circle at 60% 40%,#34d8ee,transparent 60%);animation-duration:34s;animation-delay:2s;"></div>
+  <div class="blob" style="top:130vh;left:6vw;width:50vw;height:50vw;filter:blur(76px);opacity:0.38;background:radial-gradient(circle at 50% 50%,#21e6b3,transparent 62%);animation-duration:38s;animation-delay:4s;"></div>
+  <div class="blob" style="top:235vh;right:2vw;width:44vw;height:44vw;filter:blur(76px);opacity:0.38;background:radial-gradient(circle at 50% 50%,#a98bff,transparent 60%);animation-duration:28s;animation-delay:6s;"></div>
+  <div class="blob" style="top:330vh;left:10vw;width:46vw;height:46vw;filter:blur(76px);opacity:0.35;background:radial-gradient(circle at 50% 50%,#ff7ab8,transparent 64%);animation-duration:32s;animation-delay:2s;"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="nav-dot"></span>Motadaka</div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#timeline">Experience</a>
+      <a href="#builds">Builds</a>
+      <a href="#artist">Artist</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-video-wrap">
+    <iframe
+      id="yt-player"
+      src="https://www.youtube.com/embed/7pzVvWEr_WI?autoplay=1&mute=1&loop=1&playlist=7pzVvWEr_WI&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1"
+      allow="autoplay; encrypted-media"
+      title="Hero background"
+    ></iframe>
+    <div class="hero-overlay"></div>
+    <div class="hero-overlay-grad"></div>
+  </div>
+
+  <button class="sound-btn" id="sound-btn" onclick="toggleSound()">
+    <svg id="sound-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <line x1="23" y1="9" x2="17" y2="15"></line>
+      <line x1="17" y1="9" x2="23" y2="15"></line>
+    </svg>
+    <span id="sound-label">Sound off</span>
+  </button>
+
+  <div class="hero-text">
+    <p class="hero-eyebrow">Snigdha</p>
+    <h1 class="hero-h1">MOTADAKA</h1>
+    <p class="hero-sub">Strategy &nbsp;·&nbsp; Security Architecture &nbsp;·&nbsp; AI Research</p>
+    <div class="hero-arrow">↓</div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main>
+
+  <!-- STATS -->
+  <section id="work" class="fade-up">
+    <p class="section-label">The Work</p>
+    <h2 class="stats-h2">Five organisations transformed.<br>Eleven systems shipped.<br>One standard.</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">11</div>
+        <div class="stat-label">Systems Shipped</div>
+        <p class="stat-desc">End-to-end products live in the world.</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Organisations Transformed</div>
+        <p class="stat-desc">M&T Bank · ATSA · JustShreem · Billion Readers · devipuram.org</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">7×</div>
+        <div class="stat-label">Speed Uplift</div>
+        <p class="stat-desc">Quality and velocity in the same body of work — the rarest combination.</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Frontier AI Companies</div>
+        <p class="stat-desc">Text-to-vision model data quality at Meta and OpenAI.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NARRATIVE -->
+  <section class="narrative fade-up">
+    <p class="section-label">An Architect at the Intersection</p>
+    <div class="narrative-body">
+      <p>At <strong>A Thousand Suns Academy</strong>, the mandate was encoding esoteric and ancient wisdom into secure, scalable modern infrastructure — a Flutter mobile app governed by a 10-service AWS stack, identity secured through OAuth 2.0, SAML, and JWT, and a media pipeline that moves sacred content from recording to platform without losing integrity.</p>
+      <p>At <strong>Billion Readers</strong>, the work extended to indigenous cultural preservation. The <em>FirstSongs</em> initiative uses AI tools like Suno to bring indigenous songs to professional audio quality and embed them in archival infrastructure designed for longevity. AI skill-share sessions drove organisational adoption of Claude, Adobe Firefly, and Gemini — transforming how a cross-country nonprofit collaborates and contracts at national scale.</p>
+      <p>At <strong>Meta and OpenAI</strong>, the standard was different in kind: data quality assurance for text-to-vision model training pipelines where correctness is not optional. What a model learns is determined entirely by what it is shown.</p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE TIMELINE -->
+  <section id="timeline" class="fade-up">
+    <p class="section-label">Experience</p>
+    <h2 class="timeline-h2">Where the work happened.</h2>
+    <div class="timeline-wrap">
+      <div class="timeline-spine"></div>
+      <div class="timeline-items">
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color:#34d8ee;box-shadow:0 0 14px rgba(52,216,238,0.6);"></div>
+          <div class="exp-card">
+            <div class="exp-meta">
+              <span class="exp-period" style="color:#34d8ee;">2022 – 2024</span>
+              <span class="exp-role">Change Champion · Enterprise Reorg</span>
+            </div>
+            <div class="exp-org">M&T Bank</div>
+            <p class="exp-body">Embedded during a critical period of organisational restructuring as M&T Bank scaled to its next tier. Translated executive strategy into ground-level behavioural change across thousands of employees — holding clarity, alignment, and momentum through institutional ambiguity. Change governance inside a regulated financial institution at scale.</p>
+            <div class="chips">
+              <span class="chip">Enterprise Change Management</span>
+              <span class="chip">Cross-Functional Alignment</span>
+              <span class="chip">Financial Services</span>
+              <span class="chip">Stakeholder Communication</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color:#a98bff;box-shadow:0 0 14px rgba(169,139,255,0.6);"></div>
+          <div class="exp-card">
+            <div class="exp-meta">
+              <span class="exp-period" style="color:#a98bff;">2024 – 2025</span>
+              <span class="exp-role">Data Quality Assurance · Text-to-Vision Models</span>
+            </div>
+            <div class="exp-org">Meta · OpenAI</div>
+            <p class="exp-body">High-precision data quality assurance for text-to-vision model training pipelines at two of the most consequential AI research organisations in the world. Reviewing, annotating, and validating multimodal data at the boundary where human judgment shapes machine intelligence. Data quality at this level is not a support function — it is architecture.</p>
+            <div class="chips">
+              <span class="chip">Multimodal AI</span>
+              <span class="chip">Data QA</span>
+              <span class="chip">Text-to-Vision</span>
+              <span class="chip">AI Annotation</span>
+              <span class="chip">Meta</span>
+              <span class="chip">OpenAI</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color:#21e6b3;box-shadow:0 0 14px rgba(33,230,179,0.6);"></div>
+          <div class="exp-card">
+            <div class="exp-meta">
+              <span class="exp-period" style="color:#21e6b3;">2023 – Present</span>
+              <span class="exp-role">Systems Architect · Product Owner</span>
+            </div>
+            <div class="exp-org">A Thousand Suns Academy</div>
+            <p class="exp-body">Approved and governed the production cloud architecture: Flutter (iOS + Android), AWS ALB, NestJS API, Cognito identity (OAuth 2.0 / SAML / JWT), RDS PostgreSQL, and an async media pipeline (S3 → Lambda → MediaConvert → CloudFront). Maintained the stack as the single source of truth across every revision. Built the Drive Transcriber pipeline — event recording to three viral-ready short clips in under 10 minutes. Surfaced production-infrastructure misalignments and held the line on data integrity when authority pushed back.</p>
+            <div class="chips">
+              <span class="chip">AWS</span>
+              <span class="chip">Flutter</span>
+              <span class="chip">NestJS</span>
+              <span class="chip">Cognito</span>
+              <span class="chip">OAuth 2.0</span>
+              <span class="chip">SAML</span>
+              <span class="chip">JWT</span>
+              <span class="chip">CloudFront</span>
+              <span class="chip">Architecture Governance</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color:#6f76ff;box-shadow:0 0 14px rgba(111,118,255,0.6);"></div>
+          <div class="exp-card">
+            <div class="exp-meta">
+              <span class="exp-period" style="color:#6f76ff;">2024 – Present</span>
+              <span class="exp-role">Product Owner · AI Layer Architect</span>
+            </div>
+            <div class="exp-org">JustShreem Labs</div>
+            <p class="exp-body">Product ownership of the JustShreem consumer mobile app from first architecture decision to live client surface. Researched and implemented Kommunicate as the conversational AI layer. Created the GoHighLevel AI bot from zero, surfaced it on the client homepage, and maintained the integration as the critical bridge between founders and production. Data integrity and strategic alignment held across chaotic organisational drift.</p>
+            <div class="chips">
+              <span class="chip">Product Ownership</span>
+              <span class="chip">Conversational AI</span>
+              <span class="chip">Kommunicate</span>
+              <span class="chip">GoHighLevel</span>
+              <span class="chip">Data Integrity</span>
+              <span class="chip">Mobile</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color:#ffcf6b;box-shadow:0 0 14px rgba(255,207,107,0.6);"></div>
+          <div class="exp-card">
+            <div class="exp-meta">
+              <span class="exp-period" style="color:#ffcf6b;">2023 – Present</span>
+              <span class="exp-role">Technology Strategist · Cultural Architect</span>
+            </div>
+            <div class="exp-org">Billion Readers · BIRD</div>
+            <p class="exp-body">Architected and automated the operational systems that allowed Billion Readers to establish cross-country subtitling branches — culminating in a contracting relationship with Indian national television. The FirstSongs initiative uses AI tools including Suno to bring indigenous songs to professional audio quality and embed them in archival infrastructure designed for longevity. Monthly AI skill-share sessions drove organisational adoption of Claude, Adobe Firefly, and Gemini, reshaping how a distributed nonprofit collaborates at scale.</p>
+            <div class="chips">
+              <span class="chip">Systems Automation</span>
+              <span class="chip">Indigenous Preservation</span>
+              <span class="chip">Subtitling</span>
+              <span class="chip">AI Skill-Share</span>
+              <span class="chip">Claude</span>
+              <span class="chip">Gemini</span>
+              <span class="chip">Nonprofit Scale</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BUILDS -->
+  <section id="builds" class="fade-up">
+    <div class="builds-header">
+      <p class="section-label" style="margin-bottom:0;">Builds</p>
+      <div class="carousel-btns">
+        <button class="carousel-btn" onclick="scrollCarousel(-1)" aria-label="Scroll left">&#8249;</button>
+        <button class="carousel-btn" onclick="scrollCarousel(1)" aria-label="Scroll right">&#8250;</button>
+      </div>
+    </div>
+    <h2 class="builds-h2">The Systems</h2>
+    <div class="carousel" id="carousel">
+      <button class="proj-card" onclick="toggleProject('kleam')" style="outline:none;border:none;" data-id="kleam">
+        <div class="proj-dot" style="background:#a98bff;"></div>
+        <div><div class="proj-title">Kleam.ai</div><div class="proj-wave" style="color:#a98bff;">AI Platform</div></div>
+        <p class="proj-impact">Multi-model AI deliberation. Custom .ai domain. Stripe-powered.</p>
+        <div class="proj-more" id="more-kleam">read more →</div>
+      </button>
+      <button class="proj-card" onclick="toggleProject('drive')" style="outline:none;border:none;" data-id="drive">
+        <div class="proj-dot" style="background:#21e6b3;"></div>
+        <div><div class="proj-title">Drive Transcriber</div><div class="proj-wave" style="color:#21e6b3;">Automation Pipeline</div></div>
+        <p class="proj-impact">Event recording → 3 viral-ready clips in under 10 minutes.</p>
+        <div class="proj-more" id="more-drive">read more →</div>
+      </button>
+      <button class="proj-card" onclick="toggleProject('textract')" style="outline:none;border:none;" data-id="textract">
+        <div class="proj-dot" style="background:#34d8ee;"></div>
+        <div><div class="proj-title">Textract / OCR</div><div class="proj-wave" style="color:#34d8ee;">Quality Layer</div></div>
+        <p class="proj-impact">AI vision OCR + Tesseract. The integrity checkpoint.</p>
+        <div class="proj-more" id="more-textract">read more →</div>
+      </button>
+      <button class="proj-card" onclick="toggleProject('quote')" style="outline:none;border:none;" data-id="quote">
+        <div class="proj-dot" style="background:#ffcf6b;"></div>
+        <div><div class="proj-title">QuotePicMaker</div><div class="proj-wave" style="color:#ffcf6b;">Content Automation</div></div>
+        <p class="proj-impact">devipuram.org: 3 weeks of content → 3 hours.</p>
+        <div class="proj-more" id="more-quote">read more →</div>
+      </button>
+      <button class="proj-card" onclick="toggleProject('speed')" style="outline:none;border:none;" data-id="speed">
+        <div class="proj-dot" style="background:#21e6b3;"></div>
+        <div><div class="proj-title">Speed Reader</div><div class="proj-wave" style="color:#21e6b3;">Literacy Technology</div></div>
+        <p class="proj-impact">Word-by-word at speed. Built for literacy.</p>
+        <div class="proj-more" id="more-speed">read more →</div>
+      </button>
+      <button class="proj-card" onclick="toggleProject('freeze')" style="outline:none;border:none;" data-id="freeze">
+        <div class="proj-dot" style="background:#6f76ff;"></div>
+        <div><div class="proj-title">Video Freeze Frame</div><div class="proj-wave" style="color:#6f76ff;">Production Tooling</div></div>
+        <p class="proj-impact">Lossless frame capture. Entirely client-side.</p>
+        <div class="proj-more" id="more-freeze">read more →</div>
+      </button>
+      <button class="proj-card" onclick="toggleProject('chime')" style="outline:none;border:none;" data-id="chime">
+        <div class="proj-dot" style="background:#ffcf6b;"></div>
+        <div><div class="proj-title">ChimeScheduler</div><div class="proj-wave" style="color:#ffcf6b;">Team Infrastructure</div></div>
+        <p class="proj-impact">Tracks hours. Keeps the team in rhythm.</p>
+        <div class="proj-more" id="more-chime">read more →</div>
+      </button>
+    </div>
+
+    <!-- Expanded project panels (outside carousel) -->
+    <div id="exp-kleam" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#a98bff;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">Kleam.ai</div>
+        <a href="https://kleam.ai" target="_blank" class="proj-expanded-link">↗ kleam.ai</a>
+      </div>
+      <p class="proj-narrative">A 'Deliberation Arena' where distinct AI personas engage users in cross-model reasoning. Fractal landing animations, a full Stripe subscription and checkout flow, and a playground experience. The most architecturally complete Replit build — a multi-model AI product with its own brand identity, custom domain, and monetisation layer.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">Multi-Model AI</span><span class="proj-chip chip">Stripe</span><span class="proj-chip chip">Subscription</span><span class="proj-chip chip">AI Personas</span><span class="proj-chip chip">kleam.ai</span>
+      </div>
+    </div>
+    <div id="exp-drive" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#21e6b3;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">Drive Transcriber</div>
+        <a href="https://drivetranscribe.replit.app" target="_blank" class="proj-expanded-link">↗ drivetranscribe.replit.app</a>
+      </div>
+      <p class="proj-narrative">Google Drive–authenticated transcription pipeline that watches a folder, runs AI transcription, and auto-identifies high-outreach viral moments from deep esoteric content — delivering edit-ready outputs to the production team without manual review.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">Google OAuth</span><span class="proj-chip chip">Drive API</span><span class="proj-chip chip">AI Transcription</span><span class="proj-chip chip">ATSA</span><span class="proj-chip chip">Automation</span>
+      </div>
+    </div>
+    <div id="exp-textract" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#34d8ee;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">Textract / OCR</div>
+        <a href="https://textract.replit.app" target="_blank" class="proj-expanded-link">↗ textract.replit.app</a>
+      </div>
+      <p class="proj-narrative">Screenshot-to-text extraction using AI vision OCR and Tesseract in parallel, with formatting tools for case conversion and post-processing. The quality gate of the transcription pipeline: ensuring what enters the system is clean, structured, and correct.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">AI Vision</span><span class="proj-chip chip">Tesseract OCR</span><span class="proj-chip chip">Text Processing</span><span class="proj-chip chip">Pipeline</span>
+      </div>
+    </div>
+    <div id="exp-quote" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#ffcf6b;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">QuotePicMaker</div>
+        <a href="https://imageni.replit.app" target="_blank" class="proj-expanded-link">↗ imageni.replit.app</a>
+      </div>
+      <p class="proj-narrative">Canvas-based styled quote image generator — font, colour, layout, download. Built for a spiritual and cultural organisation whose content team previously spent three weeks producing what this tool renders in hours.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">Canvas</span><span class="proj-chip chip">Content Automation</span><span class="proj-chip chip">Social Media</span><span class="proj-chip chip">devipuram.org</span>
+      </div>
+    </div>
+    <div id="exp-speed" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#21e6b3;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">Speed Reader</div>
+        <a href="https://speead.replit.app" target="_blank" class="proj-expanded-link">↗ speead.replit.app</a>
+      </div>
+      <p class="proj-narrative">RSVP-style reading application that flashes text word-by-word at a fixed focal point. Built in direct alignment with the Billion Readers mission of improving global literacy.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">RSVP</span><span class="proj-chip chip">Literacy</span><span class="proj-chip chip">Billion Readers</span><span class="proj-chip chip">Accessibility</span>
+      </div>
+    </div>
+    <div id="exp-freeze" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#6f76ff;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">Video Freeze Frame</div>
+        <a href="https://video-freeze-frame.replit.app" target="_blank" class="proj-expanded-link">↗ video-freeze-frame.replit.app</a>
+      </div>
+      <p class="proj-narrative">Browser-native tool for capturing still frames from video at full native resolution, exported as lossless PNG. Zero uploads, zero server dependency. The fastest tool removes the most steps.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">Client-Side</span><span class="proj-chip chip">Video</span><span class="proj-chip chip">PNG Export</span><span class="proj-chip chip">Privacy-First</span>
+      </div>
+    </div>
+    <div id="exp-chime" class="proj-expanded">
+      <div class="proj-expanded-bar" style="background:#ffcf6b;"></div>
+      <div class="proj-expanded-header">
+        <div class="proj-expanded-title">ChimeScheduler</div>
+        <a href="https://tuime.replit.app" target="_blank" class="proj-expanded-link">↗ tuime.replit.app</a>
+      </div>
+      <p class="proj-narrative">Interval timer with custom chimes, colour-coded timestamps, and localStorage persistence. Built for the production team. Small tool, large signal: an architect who builds for the people around her.</p>
+      <div class="proj-chips chips">
+        <span class="proj-chip chip">Team Tooling</span><span class="proj-chip chip">Time Tracking</span><span class="proj-chip chip">localStorage</span><span class="proj-chip chip">Org Design</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTIST / SNIEAKS -->
+  <section id="artist" class="fade-up">
+    <p class="section-label amber">Artist</p>
+    <div class="artist-card">
+      <canvas id="mandelbrot-canvas"></canvas>
+      <div class="artist-fractal-overlay"></div>
+      <div class="artist-border-inset"></div>
+
+      <div class="artist-content">
+        <div class="artist-top">
+          <div style="flex-shrink:0;">
+            <img
+              src="https://i.scdn.co/image/ab676161000051743e361fd971f5a6e6c9c14180"
+              alt="Snieaks"
+              class="artist-photo"
+            />
+          </div>
+          <div style="flex:1;">
+            <h3 class="artist-name">Snieaks</h3>
+            <p class="artist-desc">
+              The accumulation of multiple theories of everything. Songs released across Spotify, Apple Music, and YouTube — and a living home at&nbsp;<a href="https://snieaks.com" target="_blank" rel="noopener">snieaks.com</a>&nbsp;where the universe inside the music renders live in the browser. Fractal worlds. Sound that holds the whole thing.
+            </p>
+            <div class="artist-links">
+              <a href="https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl" target="_blank" rel="noopener" class="artist-link spotify">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                Spotify
+              </a>
+              <a href="https://www.youtube.com/@snieaks" target="_blank" rel="noopener" class="artist-link youtube">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+              </a>
+              <a href="https://snieaks.com" target="_blank" rel="noopener" class="artist-link site">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                snieaks.com
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="artist-iframe-wrap">
+          <div class="artist-iframe-bar">
+            <div class="artist-iframe-dot"></div>
+            snieaks.com — live
+          </div>
+          <iframe src="https://snieaks.com" title="Snieaks" allow="autoplay; encrypted-media"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING — A LIVING PARADOX -->
+  <section class="closing fade-up">
+    <div class="closing-center">
+      <p class="section-label violet">The Thread</p>
+      <h2 class="closing-h2">A living paradox.</h2>
+      <p class="closing-p1">A security architect who writes the music that plays on the internet. A keeper of ancient and esoteric wisdom who governs the cloud infrastructure that carries it. A specialist in the quality of what machines are taught to see, who also builds the tools that preserve what human eyes once feared would be lost forever.</p>
+      <p class="closing-p2">The rarest things cannot coexist — except they do, here, in one body of work. Speed and quality. Precision and feeling. The frontier of what is possible and the depth of what has always been true. A financial institution and a fractal. An indigenous song and a language model. A change governance framework and a song about the void.</p>
+      <p class="closing-quote">"The thread is not contradiction. It is the accumulation of multiple theories of everything, held by one standard: integrity — in the data, in the systems, in the people on either side of every decision."</p>
+    </div>
+    <div class="paradox-grid">
+      <div class="paradox-card">
+        <div class="paradox-dot" style="background:#34d8ee;box-shadow:0 0 10px rgba(52,216,238,0.53);"></div>
+        <div class="paradox-title">Precision + Poetry</div>
+        <p class="paradox-body">The same mind that validates what a machine learns to see also writes the music that plays when you close your eyes. These are not opposites. They are the same impulse.</p>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-dot" style="background:#a98bff;box-shadow:0 0 10px rgba(169,139,255,0.53);"></div>
+        <div class="paradox-title">Ancient + Emergent</div>
+        <p class="paradox-body">Cloud infrastructure in service of esoteric wisdom. AI tools in service of indigenous songs. The newest thing preserving the oldest. The boundary between them is where the work lives.</p>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-dot" style="background:#21e6b3;box-shadow:0 0 10px rgba(33,230,179,0.53);"></div>
+        <div class="paradox-title">Scale + Soul</div>
+        <p class="paradox-body">Systems that reach national television and frontier AI labs. Tools that give a single team member three weeks of their life back. Both matter. Neither is more important than the other.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">MOTADAKA</div>
+    <div class="footer-links">
+      <a href="https://billionreaders.org" target="_blank" rel="noopener">billionreaders.org</a>
+      <a href="https://kleam.ai" target="_blank" rel="noopener">kleam.ai</a>
+      <a href="https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl" target="_blank" rel="noopener">Snieaks on Spotify</a>
+    </div>
+    <div class="footer-copy">Strategy · Security Architecture · AI Research · 2026</div>
+  </div>
+</footer>
+
+<script>
+  // ── MANDELBROT ──
+  (function() {
+    const canvas = document.getElementById('mandelbrot-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = 480, H = 320;
+    canvas.width = W; canvas.height = H;
+    const maxIter = 140;
+    const cx = -0.7269, cy = 0.1889;
+    const imageData = ctx.createImageData(W, H);
+    for (let px = 0; px < W; px++) {
+      for (let py = 0; py < H; py++) {
+        const x0 = cx + (px - W / 2) / (0.26 * W);
+        const y0 = cy + (py - H / 2) / (0.26 * H);
+        let x = 0, y = 0, iter = 0;
+        while (x*x + y*y <= 4 && iter < maxIter) {
+          const t = x*x - y*y + x0;
+          y = 2*x*y + y0; x = t; iter++;
+        }
+        const idx = (py * W + px) * 4;
+        if (iter === maxIter) {
+          imageData.data[idx + 3] = 255;
+        } else {
+          const t = iter / maxIter;
+          const s = Math.pow(t, 0.45);
+          imageData.data[idx]     = Math.floor(255 * s * s);
+          imageData.data[idx + 1] = Math.floor(60  * s * (1 - s) * 4);
+          imageData.data[idx + 2] = Math.floor(200 * s * (1 - s) * 4);
+          imageData.data[idx + 3] = Math.floor(200 * s);
+        }
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  })();
+
+  // ── SOUND TOGGLE ──
+  var muted = true;
+  var soundIcon = document.getElementById('sound-icon');
+  var soundLabel = document.getElementById('sound-label');
+  function toggleSound() {
+    var player = document.getElementById('yt-player');
+    if (!player || !player.contentWindow) return;
+    var func = muted ? 'unMute' : 'mute';
+    player.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: [] }), '*');
+    muted = !muted;
+    soundLabel.textContent = muted ? 'Sound off' : 'Sound on';
+    if (muted) {
+      soundIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+    } else {
+      soundIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+    }
+  }
+
+  // ── CAROUSEL ──
+  function scrollCarousel(dir) {
+    var el = document.getElementById('carousel');
+    if (el) el.scrollBy({ left: dir * 360, behavior: 'smooth' });
+  }
+
+  // ── PROJECT EXPAND ──
+  var openProject = null;
+  var projectMap = { kleam:'kleam', drive:'drive', textract:'textract', quote:'quote', speed:'speed', freeze:'freeze', chime:'chime' };
+  function toggleProject(id) {
+    var panel = document.getElementById('exp-' + id);
+    var moreEl = document.getElementById('more-' + id);
+    if (!panel) return;
+    if (openProject && openProject !== id) {
+      var old = document.getElementById('exp-' + openProject);
+      var oldMore = document.getElementById('more-' + openProject);
+      if (old) old.classList.remove('open');
+      if (oldMore) oldMore.textContent = 'read more →';
+    }
+    var isOpen = panel.classList.contains('open');
+    if (isOpen) {
+      panel.classList.remove('open');
+      if (moreEl) moreEl.textContent = 'read more →';
+      openProject = null;
+    } else {
+      panel.classList.add('open');
+      if (moreEl) moreEl.textContent = 'collapse ↑';
+      openProject = id;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // ── SCROLL FADE-UP ──
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>
