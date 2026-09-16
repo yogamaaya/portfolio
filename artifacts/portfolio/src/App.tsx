@@ -85,7 +85,7 @@ const experience = [
   },
   {
     id: "atsa",
-    period: "2023 – Present",
+    period: "2025 – 2026",
     org: "A Thousand Suns Academy",
     role: "Systems Architect · Product Owner",
     color: "#21e6b3",
@@ -103,7 +103,7 @@ const experience = [
   },
   {
     id: "bird",
-    period: "2023 – Present",
+    period: "2025 – 2026",
     org: "Billion Readers · BIRD",
     role: "Technology Strategist · Cultural Architect",
     color: "#ffcf6b",
