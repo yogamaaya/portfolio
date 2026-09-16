@@ -61,7 +61,7 @@ const stats = [
   { num: "11", label: "Systems Shipped", desc: "End-to-end products live in the world." },
   { num: "5", label: "Organisations Transformed", desc: "M&T Bank · ATSA · JustShreem · Billion Readers · devipuram.org" },
   { num: "7×", label: "Speed Uplift", desc: "Quality and velocity in the same body of work — the rarest combination." },
-  { num: "2", label: "Frontier AI Companies", desc: "Text-to-vision model data quality at Meta and OpenAI." },
+  { num: "2", label: "Tier-One Laboratories", desc: "Invisible Technologies supporting tier-one frontier artificial intelligence laboratories." },
 ];
 
 const experience = [
@@ -75,13 +75,13 @@ const experience = [
     chips: ["Enterprise Change Management", "Cross-Functional Alignment", "Financial Services", "Stakeholder Communication"],
   },
   {
-    id: "meta-openai",
+    id: "frontier-labs",
     period: "2024 – 2025",
-    org: "Meta · OpenAI",
-    role: "Data Quality Assurance · Text-to-Vision Models",
+    org: "Invisible Technologies",
+    role: "Data Quality Assurance · Tier-One Frontier Artificial Intelligence Laboratories",
     color: "#a98bff",
-    body: "High-precision data quality assurance for text-to-vision model training pipelines at two of the most consequential AI research organisations in the world. Reviewing, annotating, and validating multimodal data at the boundary where human judgment shapes machine intelligence. Data quality at this level is not a support function — it is architecture.",
-    chips: ["Multimodal AI", "Data QA", "Text-to-Vision", "AI Annotation", "Meta", "OpenAI"],
+    body: "High-precision data quality assurance for text-to-vision model training pipelines through Invisible Technologies, supporting tier-one frontier artificial intelligence laboratories. Reviewing, annotating, and validating multimodal data at the boundary where human judgment shapes machine intelligence. Data quality at this level is not a support function — it is architecture.",
+    chips: ["Invisible Technologies", "Multimodal AI", "Data QA", "Text-to-Vision", "AI Annotation"],
   },
   {
     id: "atsa",
@@ -366,7 +366,7 @@ export default function App() {
               At <strong className="text-[#edf0f7] font-semibold">Billion Readers</strong>, the work extended to indigenous cultural preservation. The <em>FirstSongs</em> initiative uses AI tools like Suno to bring indigenous songs to professional audio quality and embed them in archival infrastructure designed for longevity. AI skill-share sessions drove organisational adoption of Claude, Adobe Firefly, and Gemini — transforming how a cross-country nonprofit collaborates and contracts at national scale.
             </motion.p>
             <motion.p variants={fadeUp}>
-              At <strong className="text-[#edf0f7] font-semibold">Meta and OpenAI</strong>, the standard was different in kind: data quality assurance for text-to-vision model training pipelines where correctness is not optional. What a model learns is determined entirely by what it is shown.
+              At <strong className="text-[#edf0f7] font-semibold">Invisible Technologies</strong>, the standard was different in kind: data quality assurance for text-to-vision model training pipelines supporting tier-one frontier artificial intelligence laboratories, where correctness is not optional. What a model learns is determined entirely by what it is shown.
             </motion.p>
           </div>
         </motion.section>
@@ -696,7 +696,7 @@ export default function App() {
               },
               {
                 label: "Scale + Soul",
-                body: "Systems that reach national television and frontier AI labs. Tools that give a single team member three weeks of their life back. Both matter. Neither is more important than the other.",
+                body: "Systems that reach national television and tier-one frontier artificial intelligence laboratories. Tools that give a single team member three weeks of their life back. Both matter. Neither is more important than the other.",
                 color: "#21e6b3",
               },
             ].map((c, i) => (
