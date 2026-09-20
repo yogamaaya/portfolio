@@ -103,17 +103,50 @@
     scrollbar-width: none;
   }
 
-  .bg-fluid-spanda { background: linear-gradient(-45deg, #1f0438, #3b0a45, #0f0426, #210214); background-size: 400% 400%; animation: fluid-bg 15s ease infinite; }
-  .bg-fluid-breath { background: linear-gradient(-45deg, #0a1930, #14324f, #050b14, #082436); background-size: 400% 400%; animation: fluid-bg 12s ease infinite; }
-  .bg-fluid-cyma { background: linear-gradient(-45deg, #3d0725, #5e0b2e, #1c020d, #290412); background-size: 400% 400%; animation: fluid-bg 18s ease infinite; }
-  .bg-fluid-kleam { background: linear-gradient(-45deg, #181938, #2a2c59, #090914, #121326); background-size: 400% 400%; animation: fluid-bg 14s ease infinite; }
-  .bg-fluid-social { background: linear-gradient(-45deg, #2b1d09, #4a3411, #120a02, #1c1004); background-size: 400% 400%; animation: fluid-bg 16s ease infinite; }
+  .ink-blot-spanda { --color-1: #3b0a45; --color-2: #140224; --glow: #a98bff; }
+  .ink-blot-breath { --color-1: #082436; --color-2: #03121f; --glow: #34d8ee; }
+  .ink-blot-cyma { --color-1: #3d0725; --color-2: #17010c; --glow: #ff7ab8; }
+  .ink-blot-kleam { --color-1: #0b241c; --color-2: #04120e; --glow: #21e6b3; }
+
+  .ink-bg-container {
+    background-color: var(--color-2);
+  }
 }
 
-@keyframes fluid-bg {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes ink-flow {
+  0% { transform: scale(1) translate(0, 0) skewX(0deg); }
+  33% { transform: scale(1.15) translate(4%, 8%) skewX(4deg); }
+  66% { transform: scale(0.9) translate(-4%, -4%) skewX(-4deg); }
+  100% { transform: scale(1.05) translate(2%, -6%) skewX(2deg); }
+}
+
+.ink-blob {
+  position: absolute;
+  filter: blur(50px);
+  mix-blend-mode: screen;
+  border-radius: 50%;
+  animation: ink-flow 20s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.ink-blob-1 {
+  width: 1400px;
+  height: 1400px;
+  top: -600px;
+  left: -200px;
+  background: radial-gradient(circle at 50% 50%, var(--glow), transparent 60%);
+  opacity: 0.12;
+}
+
+.ink-blob-2 {
+  width: 1600px;
+  height: 1600px;
+  bottom: -700px;
+  right: -300px;
+  background: radial-gradient(circle at 50% 50%, var(--color-1), transparent 60%);
+  opacity: 0.20;
+  animation-duration: 25s;
+  animation-direction: alternate-reverse;
 }
 
 @keyframes aurora-text {

@@ -616,23 +616,6 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-
-                {/* snieaks.com embedded */}
-                <div className="rounded-[14px] overflow-hidden border border-white/[0.07]"
-                  style={{ background: "#000" }}>
-                  <div className="text-[11px] tracking-[0.12em] uppercase text-[#727e9c] font-sans px-4 py-2.5 border-b border-white/[0.06] flex items-center gap-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#ffcf6b]/60" />
-                    snieaks.com — live
-                  </div>
-                  <iframe
-                    src="https://snieaks.com"
-                    title="Snieaks"
-                    className="w-full pointer-events-none"
-                    style={{ height: "420px", border: "none", display: "block" }}
-                    allow="autoplay; encrypted-media"
-                    tabIndex={-1}
-                  />
-                </div>
               </div>
             </Link>
           </motion.div>
