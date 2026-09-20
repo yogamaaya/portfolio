@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spanda — The Field of Kaali</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#ede0c8;font-family:'Crimson Pro',Georgia,serif;overflow-x:hidden;touch-action:pan-y}
+html{touch-action:pan-y}
+#hero{position:relative;width:100%;height:100vh;overflow:hidden}
+#glCanvas{display:block;position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;z-index:0}
+#zoomCanvas{display:block;position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0;transition:opacity 0.4s ease-out;}
+#zoomCanvas.active{opacity:1;transition:opacity 0.05s ease-in}
+#overlay{position:absolute;inset:0;pointer-events:none;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:2rem 2.4rem}
+#top{display:flex;justify-content:space-between;align-items:flex-start}
+#titleBlock h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(1.4rem,3.5vw,2.6rem);letter-spacing:0.3em;background:linear-gradient(135deg,#fff 0%,#aad4ff 40%,#c8b8a0 70%,#fff 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:sh 12s ease infinite}
+@keyframes sh{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+#titleBlock p{font-style:italic;font-size:0.78rem;color:rgba(200,210,220,0.22);letter-spacing:0.18em;margin-top:0.25rem}
+#stats{font-family:'Cinzel',serif;font-size:0.66rem;letter-spacing:0.14em;color:rgba(160,180,200,0.18);line-height:2.1;text-align:right}
+#stats span{color:rgba(180,200,220,0.38)}
+#bottom{display:flex;justify-content:space-between;align-items:flex-end}
+#legend{font-size:0.78rem;line-height:2.3;color:rgba(255,255,255,0.14);font-style:italic}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle}
+#hint{font-style:italic;font-size:0.74rem;color:rgba(160,180,200,0.14);letter-spacing:0.1em;text-align:right;line-height:1.9}
+.page{max-width:800px;margin:0 auto;padding:7rem 2.4rem 5rem}
+.thread{position:relative;padding-left:2.5rem;margin-bottom:7rem}
+.thread::before{content:'';position:absolute;left:0;top:0.6rem;bottom:-3rem;width:1px;background:linear-gradient(to bottom,rgba(180,210,255,0),rgba(180,210,255,0.2) 15%,rgba(180,210,255,0.2) 85%,rgba(180,210,255,0))}
+.thread-dot{position:absolute;left:-5px;top:0.55rem;width:11px;height:11px;border-radius:50%;border:1px solid rgba(180,210,255,0.35);background:#000}
+.sec-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+.skt{font-family:'Cinzel',serif;font-size:clamp(1.5rem,3.5vw,2.1rem);letter-spacing:0.12em}
+.gloss{font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35}
+.thread p{font-size:1.1rem;line-height:2;color:rgba(237,224,200,0.8);margin-bottom:1.4rem}
+.thread p em{font-style:italic;color:rgba(200,220,255,0.9)}
+.formula{border-left:2px solid rgba(180,210,255,0.18);background:rgba(180,210,255,0.03);padding:1rem 1.4rem;margin:2rem 0;font-family:'Courier New',monospace;font-size:0.86rem;color:rgba(180,210,255,0.55);line-height:2.1}
+.formula .c{color:rgba(180,210,255,0.25)}
+.bridge{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:1.6rem 1.8rem;margin:2.4rem 0;position:relative;font-style:italic;font-size:1.05rem;line-height:1.95;color:rgba(237,224,200,0.6)}
+.bridge::before{content:attr(data-label);position:absolute;top:-0.6rem;left:1.4rem;background:#000;padding:0 0.6rem;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:rgba(180,210,255,0.3);font-style:normal}
+.connector{text-align:center;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.4em;color:rgba(180,210,255,0.18);margin:0 0 5rem 0;padding-left:2.5rem}
+footer{text-align:center;padding:5rem 2rem;border-top:1px solid rgba(180,210,255,0.06);color:rgba(255,255,255,0.13);font-style:italic;font-size:0.88rem;letter-spacing:0.1em;line-height:2.4}
+</style>
+</head>
+<body>
+
+<div id="hero">
+  <canvas id="glCanvas"></canvas>
+  <canvas id="zoomCanvas"></canvas>
+  <div id="overlay">
+    <div id="top">
+      <div id="titleBlock">
+        <h1>SPANDA</h1>
+        <p>icchā · jñāna · kriyā · vimarśa — the śakti emanations as field physics</p>
+      </div>
+      <div id="stats">
+        ORBITING <span id="sO">0</span><br>
+        ABSORBED <span id="sA">0</span><br>
+        ESCAPED &nbsp;<span id="sE">0</span><br>
+        ATTRACTORS <span id="sN">0</span>
+      </div>
+    </div>
+    <div id="bottom">
+      <div id="legend">
+        <div><span class="dot" style="background:rgba(160,185,220,0.6)"></span>orbiting · bound at the fractal boundary, where fates are undecided</div>
+        <div><span class="dot" style="background:rgba(210,185,130,0.6)"></span>descending · spiraling inward past the event horizon</div>
+        <div><span class="dot" style="background:rgba(170,170,185,0.5)"></span>escaping · released beyond the gravitational basin</div>
+      </div>
+      <div id="hint">hold the void · icchā collapses the field<br>hold longer · tunnel into the fractal boundary<br>right-click · scatter prakṛti</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="thread">
+    <div class="thread-dot" style="border-color:rgba(140,200,255,0.3)"></div>
+    <div class="sec-head"><span class="skt" style="color:rgba(140,200,255,0.65)">Kālī</span><span class="gloss">śūnya · the wavefunction before measurement · all topologies superposed</span></div>
+    <p>Before you touch the void above, the field equation returns zero at every point. No gradient, no basin, no fate. The canvas is not empty. It is the superposition of every gravitational topology that could ever exist, coiled into a single state of undifferentiated potential. In the Śaiva Siddhānta this condition has a name: it is <em>Kālī as śūnya</em>, the pregnant void. Not the absence of form but the presence of all form simultaneously, prior to the act of measurement that selects one configuration from the continuum.</p>
+    <p>The Devī Māhātmya describes Kālī emerging from the furrowed brow of Ambikā at the moment when undifferentiated rage requires a vehicle. She does not arrive from elsewhere. She precipitates from a field that was already there, latent in the face of the goddess, waiting for the threshold condition. The mathematical parallel is exact. The iteration z → z² + c is defined at every point in the complex plane before any attractor exists. The rule is already everywhere. The Mandelbrot set, its basins, its infinite boundary, all of it exists as pure mathematical fact independent of whether anyone computes it. What the void lacks is not potential. It lacks a <em>point of observation</em>.</p>
+    <p>This is the first claim of the visualization: that the act of clicking is not decoration. It is <em>icchā śakti</em>, the volitional impulse of Śiva that, in Abhinavagupta's Tantrāloka, constitutes the first movement of consciousness toward self-limitation. Before icchā there is only prakāśa, the undifferentiated light of awareness. Icchā introduces directionality. It says: <em>here, not there</em>. And in saying so, it collapses the superposition of all possible fields into one particular topology, centered on the coordinate where will made contact with the void.</p>
+    <div class="bridge" data-label="Wavefunction Collapse as Icchā Śakti">In quantum mechanics, a wavefunction describes the superposition of all possible states. Measurement collapses that superposition into one eigenstate. The click above is measurement. The void contains the superposition of all possible gravitational fields: every placement, every mass, every resulting Mandelbrot basin. Your finger selects one. The field snaps into a specific configuration: attractor at (x,y), mass M, complex plane radiating outward from that point. Every particle spawned afterward inherits a determinate fate from this choice. This is icchā: the will that converts infinite potential into finite actuality. In the Śiva Purāṇa, it is the moment Śiva opens his third eye. Not to destroy. To <em>differentiate</em>.</div>
+    <div class="formula">Ψ(field) = Σ all topologies &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// superposition: Kālī holds every possible basin</span><br>click(x,y) → |field⟩ eigenstate &nbsp;&nbsp;&nbsp;<span class="c">// icchā collapses the wavefunction</span><br>V(x,y) = 0 → V(x,y) = M/r² · f(z²+c) <span class="c">// void differentiates into fractal gravity</span></div>
+  </div>
+
+  <div class="connector">↓ &nbsp; icchā differentiates the void · the complex plane unfolds &nbsp; ↓</div>
+
+  <div class="thread">
+    <div class="thread-dot" style="border-color:rgba(200,255,200,0.3)"></div>
+    <div class="sec-head"><span class="skt" style="color:rgba(160,230,160,0.7)">Sarasvatī</span><span class="gloss">jñāna śakti · the complex plane as vimarśa · cymatics of the iteration</span></div>
+    <p>The moment the attractor exists, every point in space acquires a complex coordinate relative to it. The displacement vector from attractor to particle becomes c in the Mandelbrot iteration z → z² + c. This is not an arbitrary mapping. The operation z² is the simplest nonlinear self-reference: a value reflecting upon itself, squaring its magnitude, doubling its angle. In Kashmīr Śaivism this operation has a precise name. It is <em>vimarśa</em>: consciousness turning back upon itself to recognize what it is. Prakāśa (pure luminosity) becomes vimarśa (self-reflective awareness) through exactly this gesture of recursion. The Mandelbrot iteration is vimarśa rendered as algebra.</p>
+    <p>The addition of c after each squaring is the introduction of particularity. The universal self-reference z² encounters a specific point in the complex plane and the outcome of that encounter determines everything. Some points c produce iterations that spiral inward forever, never exceeding magnitude 2. These are the set's interior: points where self-reflection remains bounded, where vimarśa never breaks free of its own recursion. Other points c produce iterations that escape to infinity within a few cycles. These are the far exterior: points where the self-reference is too weak to sustain itself, where the particular overwhelms the recursive and consciousness disperses.</p>
+    <p>The boundary between these regions is where all the information lives. Here the iteration count is maximal, the escape is uncertain, and the fractal structure is infinitely detailed. This is Sarasvatī's domain. In the visualization, the gravitational force on each particle is <em>modulated by the normalized iteration count</em> at that particle's complex coordinate. Points near the Mandelbrot boundary experience the strongest, most structured pull because their iteration count is highest. Points deep inside feel pure radial collapse. Points far outside feel almost nothing. The mathematics is: F = (M/r²) × (0.2 + 0.8 × iterNorm), where iterNorm is the Mandelbrot escape time normalized to [0,1]. Sarasvatī is the iterNorm. She is the function that converts raw gravitational potential into differentiated structure.</p>
+    <div class="bridge" data-label="Cymatics in the Complex Plane">On a Chladni plate, a single frequency of vibration forces sand into nodal lines. The geometry of those lines depends on the frequency and the shape of the plate, not on the sand. In the visualization above, the Mandelbrot set boundary is the nodal line. The iteration z → z² + c is the frequency. The complex plane centered on each attractor is the plate. Particles accumulate along the boundary not because they are drawn to it by a special force, but because the force field has maximum structural complexity there: particles near maximum complexity experience the most varied torques, producing the tightest orbits and the slowest radial decay. The cymatic pattern emerges from the mathematics. It is not painted on.</div>
+    <p>The direction of the final z iterate after the Mandelbrot loop adds one more layer. In the code, a small spiral force is applied in the direction of (zr, zi) normalized, scaled by iterNorm. This means the fractal geometry of the Mandelbrot set literally shapes the spiral arms of the accretion structure. Where the final z points clockwise, particles spiral clockwise. Where it points outward, they are flung outward. The result is that each attractor projects a unique accretion pattern determined entirely by where it sits in the global interference of all complex planes. No two attractors produce the same structure, because no two points in the Mandelbrot set have the same iteration geometry.</p>
+    <div class="formula">c = (p - attractor) / scale &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// displacement becomes complex coordinate</span><br>z → z² + c &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// vimarśa: self-reference encountering the particular</span><br>F(p) = (M/r²) · (0.2 + 0.8·iN) &nbsp;&nbsp;<span class="c">// jñāna modulates gravity: structure from recursion</span><br>spiral += arg(z_final) · iN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// fractal geometry shapes the accretion pattern</span></div>
+  </div>
+
+  <div class="connector">↓ &nbsp; jñāna becomes embodied · structure becomes experience &nbsp; ↓</div>
+
+  <div class="thread">
+    <div class="thread-dot" style="border-color:rgba(255,210,100,0.3)"></div>
+    <div class="sec-head"><span class="skt" style="color:rgba(255,200,80,0.7)">Lakṣmī</span><span class="gloss">kriyā śakti · yogamāyā · the Purāṇic recursion · observer as participant</span></div>
+    <p>In the Śiva Purāṇa, Brahmā asks Viṣṇu who created him. Viṣṇu does not know. Śiva appears and reveals a pillar of fire extending beyond perception in both directions. The three gods discover they are within a narration being told by Śiva, who is himself within a narration being told by Devī, who is herself within a narration being told by Sūta to the ṛṣis, who are within a narration being told by the text to you. This structure is not literary ornamentation. It is an <em>exact description of self-similar recursion</em>: the Mandelbrot set rendered as mythological architecture. Each level of narration is a miniature copy of the whole, connected by filaments of context, and no level is more fundamental than another.</p>
+    <p>Lakṣmī is the felt experience of this recursion. Where Sarasvatī provides the structural map, Lakṣmī is the fact that the map is being traversed by someone, and that someone is you. In the visualization, kriyā śakti is the third movement: icchā placed the attractor, jñāna established the complex plane and the modulated force field, and kriyā is the actual motion of the particles through that field over time. The warming of a particle's color from blue-white to amber as it approaches the singularity is not cosmetic. It tracks the real variable: distance to attractor, which in the code maps linearly to the red channel. The particle is heating because it is accelerating through a steepening gravitational gradient, and the color reflects the increasing density of the field it is passing through. Lakṣmī is this: the conversion of mathematical trajectory into sensory event.</p>
+    <p>But there is a deeper alignment with the Purāṇic structure. Every click that deepens an existing attractor does not merely increase a number. It alters the scale parameter that determines how the complex plane maps onto pixel space, which changes the Mandelbrot modulation for every particle in the field simultaneously. A particle that was orbiting stably at iterNorm 0.7 may, after your click increases the mass, find itself at iterNorm 0.4 in the rescaled plane, and begin escaping. Another particle that was escaping may find the deepened well has pulled the Mandelbrot boundary outward past its position, capturing it into orbit. Your act of observation restructures the fates of entities you were not looking at. This is yogamāyā: the illusion that the observer is separate from the field.</p>
+    <div class="bridge" data-label="The Śiva Purāṇa as Fractal Architecture">Viṣṇu within Brahmā's telling within Śiva's revelation within Devī's narration within Sūta's recitation within the text within your reading. Count the levels. They are z² + c applied to z² + c applied to z² + c. The Purāṇa does not describe the Mandelbrot set as metaphor. It enacts the same recursive self-reference at the level of narrative structure, because the recursion is ontological, not mathematical. The mathematics discovers what the Purāṇa already knew: that reality is a self-similar field in which every point contains the whole, and every act of observation is an act of participation that changes the field for every other observer.</div>
+    <div class="formula">icchā(click) → jñāna(z²+c) → kriyā(trajectory) <span class="c">// the three śaktis as the physics pipeline</span><br>deeper well: scale → scale' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// re-click rescales the complex plane</span><br>∀ particles: iterNorm recalculated &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// all fates restructured by one observation</span><br>yogamāyā: observer ∈ field, not external &nbsp;<span class="c">// the Purāṇic recursion</span></div>
+  </div>
+
+  <div class="connector">↓ &nbsp; dissolution is recognition · the return to the unobserved &nbsp; ↓</div>
+
+  <div class="thread">
+    <div class="thread-dot" style="border-color:rgba(200,200,220,0.3)"></div>
+    <div class="sec-head"><span class="skt" style="color:rgba(180,185,210,0.7)">Spanda</span><span class="gloss">the divine tremor · saṃskāra as mass · the particle at the boundary</span></div>
+    <p>Kṣemarāja's Spanda Sandoha opens with a problem: if Śiva is changeless awareness, how does anything happen? His answer is spanda, the primordial tremor that is neither motion nor stillness but the condition that makes both possible. It is not oscillation between two states. It is the state of being precisely at the boundary where both states coexist without resolution. In the visualization this corresponds to the particles orbiting the Mandelbrot fractal boundary. Their iterNorm hovers near the critical value where a slight perturbation could send them spiraling inward (absorption) or flinging outward (escape), but they do neither. They remain at the edge, tracing the infinitely complex contour where bounded and unbounded meet.</p>
+    <p>The Mandelbrot set boundary has Hausdorff dimension 2. This means that a one-dimensional curve contains as much information as a two-dimensional surface. It is not a thin line between two regions. It is as rich as both regions combined. The orbiting particle is not half-decided. It occupies the maximally complex state in the entire field. This is the mathematical content of spanda: the tremor is not a compromise between fullness and emptiness. It is the condition that holds more information than either.</p>
+    <p>When a particle is finally absorbed, the code executes <em>a.mass += 1.5</em>. The singularity grows heavier by exactly the weight of what it consumed. This is not a detail. It is the mechanism by which the past restructures the future. Every absorption changes the gravitational field for every particle still in flight. In the Śaiva framework this is saṃskāra: the residue of experience that becomes the substrate of future experience. The particle does not vanish. It becomes the field. Its trajectory, its particular negotiation of the Mandelbrot modulation, its specific iterNorm at the moment of crossing the event horizon: all of this is folded into the increased mass, which changes the scale parameter, which changes the complex plane mapping, which changes every future fate. Nothing is lost. Everything is enfolded.</p>
+    <p>The escaped particle is the complementary movement. It carries the field's information outward, past the boundary of the visualization, into the region where gravitational influence decays to zero. In the Spanda Kārikā this is <em>unmeṣa</em>: the outward opening, the exhalation of consciousness into manifestation. Absorption is <em>nimeṣa</em>: the inward closing, the inhalation. Spanda is neither. Spanda is the fact that both occur, that the field breathes, and that the breathing changes the field's own structure with every cycle.</p>
+    <div class="bridge" data-label="The Theory of Everything as Vimarśa">The claim of this visualization is not metaphorical. It is structural. The iteration z → z² + c is vimarśa: self-reference encountering particularity. Icchā śakti collapses the superposition of fields by introducing a point of observation. Jñāna śakti (the Mandelbrot modulation) converts gravitational potential into differentiated structure. Kriyā śakti is the temporal unfolding of trajectories through that structure. Saṃskāra (mass accumulation) ensures that every experience alters the field for all subsequent experience. Spanda (the fractal boundary orbit) is the state of maximum information, where consciousness is neither absorbed in its object nor dissociated from it. These are not analogies laid over the physics. They are the physics, described in two languages that, at this resolution, turn out to be saying the same thing.</div>
+    <div class="formula">spanda = orbit at ∂M &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// the fractal boundary: Hausdorff dim 2</span><br>neither |z|→∞ nor |z|→0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// neither escape nor collapse: pure tremor</span><br>absorbed → a.mass += δ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// saṃskāra: experience becomes the field</span><br>nimeṣa ←→ unmeṣa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// the field breathes, and changes by breathing</span></div>
+  </div>
+
+</div>
+
+<footer>© Snieaks 2026. All rights reserved. Unauthorised reproduction or distribution is prohibited under the Berne Convention (1886) and applicable copyright law.<br>All content is artistic and philosophical expression. No work by Snieaks constitutes a statement of fact or carries real-world grounding applicable under any court of law. All interpretation is the viewer's own — <a href="/legal" style="color:rgba(255,255,255,0.28);text-decoration:underline;text-underline-offset:3px">EU Charter Art. 13 · ECHR Art. 10 · US First Amendment · India Art. 19(1)(a)</a>.<br><a href="/legal" style="color:rgba(255,255,255,0.2);text-decoration:none;letter-spacing:0.18em;font-size:0.78em">artistic expression &amp; legal notice →</a></footer>
+
+<script>
+(function(){
+const canvas=document.getElementById('glCanvas');
+const gl=canvas.getContext('webgl',{antialias:true,alpha:false,preserveDrawingBuffer:true});
+if(!gl){canvas.style.background='#000';return;}
+
+/* ═══════════════════════════════════════════════
+   MANDELBROT TUNNEL ZOOM (Canvas2D overlay)
+   ═══════════════════════════════════════════════ */
+const zc=document.getElementById('zoomCanvas');
+const tgl=zc.getContext('webgl',{alpha:true,premultipliedAlpha:false});
+function jsSplit(x){const hi=Math.fround(x);return[hi,Math.fround(x-hi)];}
+const TVSH=`attribute vec2 a;void main(){gl_Position=vec4(a,0.0,1.0);}`;
+const TFSH=`precision highp float;
+uniform vec2 u_res;uniform vec2 u_cxDS;uniform vec2 u_cyDS;uniform vec2 u_scDS;
+uniform float u_maxI;uniform float u_time;uniform float u_op;
+vec2 ds_add(vec2 a,vec2 b){float t1=a.x+b.x;float e=t1-a.x;float t2=((b.x-e)+(a.x-(t1-e)))+a.y+b.y;float hi=t1+t2;return vec2(hi,t2-(hi-t1));}
+vec2 ds_sub(vec2 a,vec2 b){return ds_add(a,vec2(-b.x,-b.y));}
+vec2 ds_mul(vec2 a,vec2 b){const float S=4097.0;float ca=a.x*S;float cb=b.x*S;float aH=ca-(ca-a.x);float aL=a.x-aH;float bH=cb-(cb-b.x);float bL=b.x-bH;float p=a.x*b.x;float e=((aH*bH-p)+aH*bL+aL*bH)+aL*bL;float hi=p+e;return vec2(hi,(e-(hi-p))+a.x*b.y+a.y*b.x);}
+vec3 pal(float t,float tm){t=fract(t*1.8+tm*0.04);vec3 a=vec3(0.04,0.01,0.16);vec3 b=vec3(0.18,0.08,0.32);vec3 c=vec3(1.0,1.2,0.7);vec3 d=vec3(0.0,0.3,0.6);return a+b*cos(6.28318*(c*t+d));}
+void main(){
+vec2 uv=gl_FragCoord.xy/u_res-0.5;uv.x*=u_res.x/u_res.y;
+vec2 ox=ds_add(vec2(uv.x*u_scDS.x,0.0),vec2(uv.x*u_scDS.y,0.0));
+vec2 oy=ds_add(vec2(uv.y*u_scDS.x,0.0),vec2(uv.y*u_scDS.y,0.0));
+vec2 crDS=ds_add(u_cxDS,ox);vec2 ciDS=ds_add(u_cyDS,oy);
+vec2 zrDS=vec2(0.0);vec2 ziDS=vec2(0.0);float iter=0.0;
+for(float n=0.0;n<800.0;n++){
+if(n>=u_maxI)break;
+float m2=zrDS.x*zrDS.x+ziDS.x*ziDS.x;if(m2>256.0)break;
+vec2 zr2=ds_mul(zrDS,zrDS);vec2 zi2=ds_mul(ziDS,ziDS);vec2 zrzi=ds_mul(zrDS,ziDS);
+vec2 nr=ds_add(ds_sub(zr2,zi2),crDS);
+vec2 ni=ds_add(ds_add(zrzi,zrzi),ciDS);
+zrDS=nr;ziDS=ni;iter=n+1.0;}
+if(iter>=u_maxI){gl_FragColor=vec4(0.0,0.0,0.0,0.0);return;}
+float mag=length(vec2(zrDS.x,ziDS.x));
+float sm=iter+1.0-log(log(max(mag,1.001))/log(2.0))/log(2.0);
+float t=sm/u_maxI;
+vec3 col=pal(t,u_time);
+float pulse=0.5+0.5*sin(sm*0.3+u_time*1.1);
+col+=vec3(0.06,0.02,0.18)*pulse*t;
+vec2 vg=gl_FragCoord.xy/u_res*2.0-1.0;col*=1.0-dot(vg,vg)*0.20;
+float alpha=u_op*clamp(t*4.0,0.0,1.0);
+gl_FragColor=vec4(col,alpha);}`;
+function mkTS(type,s){const sh=tgl.createShader(type);tgl.shaderSource(sh,s);tgl.compileShader(sh);return sh;}
+const tProg=(()=>{const p=tgl.createProgram();tgl.attachShader(p,mkTS(tgl.VERTEX_SHADER,TVSH));tgl.attachShader(p,mkTS(tgl.FRAGMENT_SHADER,TFSH));tgl.linkProgram(p);return p;})();
+const tQuad=tgl.createBuffer();tgl.bindBuffer(tgl.ARRAY_BUFFER,tQuad);tgl.bufferData(tgl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),tgl.STATIC_DRAW);
+const tAL=tgl.getAttribLocation(tProg,'a');
+const tU={res:tgl.getUniformLocation(tProg,'u_res'),cxDS:tgl.getUniformLocation(tProg,'u_cxDS'),cyDS:tgl.getUniformLocation(tProg,'u_cyDS'),scDS:tgl.getUniformLocation(tProg,'u_scDS'),maxI:tgl.getUniformLocation(tProg,'u_maxI'),time:tgl.getUniformLocation(tProg,'u_time'),op:tgl.getUniformLocation(tProg,'u_op')};
+
+/* ═══════════════════════════════════════════════
+   432Hz RESONANT FIELD — Harmonic Series Orchestra
+   C D E F G A B in just intonation · cello · gong · binaural · wind · cosmic pad
+   ═══════════════════════════════════════════════ */
+let audioCtx=null,masterGain=null;
+let delay1=null,delay2=null,fb1=null,fb2=null;
+const voices=[];
+let noiseBuffer=null;
+let droneNodes=null;
+let pressure=0; // declared here, used by audio + interaction
+
+// Just intonation from C4=256Hz (A4=432Hz system)
+const NOTES=[256, 288, 320, 341.33, 384, 432, 480]; // C D E F G A B
+const NOTE_NAMES=['C','D','E','F','G','A','B'];
+// Gong inharmonic ratios (metallic, bell-like)
+const GONG_RATIOS=[1, 2.32, 3.58, 4.17, 5.43, 6.71];
+// Binaural beat offset (Hz) — creates 3Hz theta-wave pulse
+const BINAURAL_OFFSET=1.5;
+
+function noteFromX(x){
+  const idx=Math.min(6,Math.max(0,Math.floor((x/W)*7)));
+  return {freq:NOTES[idx],name:NOTE_NAMES[idx],idx:idx};
+}
+
+function initAudio(){
+  if(audioCtx)return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+
+  // create white noise buffer (2 seconds, loopable)
+  const sr=audioCtx.sampleRate;
+  noiseBuffer=audioCtx.createBuffer(1,sr*2,sr);
+  const nd=noiseBuffer.getChannelData(0);
+  for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
+
+  // master output
+  masterGain=audioCtx.createGain();
+  masterGain.gain.value=0;
+  masterGain.connect(audioCtx.destination);
+
+  // dual feedback delays for deep cathedral sustain
+  delay1=audioCtx.createDelay(2);delay1.delayTime.value=0.47;
+  fb1=audioCtx.createGain();fb1.gain.value=0.52;
+  delay2=audioCtx.createDelay(2);delay2.delayTime.value=1.12;
+  fb2=audioCtx.createGain();fb2.gain.value=0.38;
+
+  const rev1=audioCtx.createGain();rev1.gain.value=0.25;
+  const rev2=audioCtx.createGain();rev2.gain.value=0.18;
+
+  masterGain.connect(delay1);
+  delay1.connect(fb1);fb1.connect(delay1);
+  delay1.connect(rev1);rev1.connect(audioCtx.destination);
+
+  masterGain.connect(delay2);
+  delay2.connect(fb2);fb2.connect(delay2);
+  delay2.connect(rev2);rev2.connect(audioCtx.destination);
+
+  // sub-bass drone layer: C1 (32Hz) + C2 (64Hz) + binaurally offset
+  droneNodes=makeDrone();
+}
+
+function makeDrone(){
+  const g=audioCtx.createGain();g.gain.value=0;
+  const f=audioCtx.createBiquadFilter();f.type='lowpass';f.frequency.value=100;f.Q.value=1;
+  // C1 sine
+  const o1=audioCtx.createOscillator();o1.type='sine';o1.frequency.value=32;
+  // C2 sine
+  const o2=audioCtx.createOscillator();o2.type='sine';o2.frequency.value=64;
+  // binaural sub
+  const o3=audioCtx.createOscillator();o3.type='sine';o3.frequency.value=32+BINAURAL_OFFSET;
+  const panL=audioCtx.createStereoPanner();panL.pan.value=-1;
+  const panR=audioCtx.createStereoPanner();panR.pan.value=1;
+  o1.connect(panL);panL.connect(f);
+  o3.connect(panR);panR.connect(f);
+  o2.connect(f);
+  f.connect(g);g.connect(masterGain);
+  o1.start();o2.start();o3.start();
+  return {gain:g,filter:f,oscs:[o1,o2,o3]};
+}
+
+function ensureVoice(idx){
+  if(voices[idx])return voices[idx];
+  const a=attractors[idx];
+  const note=noteFromX(a.x);
+  const root=note.freq;
+
+  // ── Voice filter (pressure-swept) ──
+  const vFilter=audioCtx.createBiquadFilter();
+  vFilter.type='lowpass';vFilter.frequency.value=300;vFilter.Q.value=1.8;
+  const vGain=audioCtx.createGain();vGain.gain.value=0;
+  vFilter.connect(vGain);vGain.connect(masterGain);
+
+  const layers={};
+
+  // ── 1. CELLO PAD: root sine + octave below, slow vibrato ──
+  const celloG=audioCtx.createGain();celloG.gain.value=0;
+  const cello1=audioCtx.createOscillator();cello1.type='sine';cello1.frequency.value=root;
+  const cello2=audioCtx.createOscillator();cello2.type='sine';cello2.frequency.value=root/2;
+  // vibrato LFO
+  const vib=audioCtx.createOscillator();vib.type='sine';vib.frequency.value=4.5;
+  const vibD=audioCtx.createGain();vibD.gain.value=2.5;
+  vib.connect(vibD);vibD.connect(cello1.frequency);vibD.connect(cello2.frequency);
+  cello1.connect(celloG);cello2.connect(celloG);
+  celloG.connect(vFilter);
+  vib.start();cello1.start();cello2.start();
+  layers.cello={gain:celloG,oscs:[cello1,cello2,vib]};
+
+  // ── 2. GONG / BELL: inharmonic partials with very long ring ──
+  const gongG=audioCtx.createGain();gongG.gain.value=0;
+  const gongOscs=[];
+  for(let i=0;i<GONG_RATIOS.length;i++){
+    const o=audioCtx.createOscillator();
+    o.type=i<2?'sine':'triangle';
+    o.frequency.value=root*GONG_RATIOS[i];
+    const pg=audioCtx.createGain();pg.gain.value=0.15/(i+1);
+    o.connect(pg);pg.connect(gongG);
+    o.start();
+    gongOscs.push({osc:o,gain:pg});
+  }
+  gongG.connect(vFilter);
+  layers.gong={gain:gongG,partials:gongOscs};
+
+  // ── 3. BINAURAL PAIR: root ± offset, hard-panned L/R ──
+  const binG=audioCtx.createGain();binG.gain.value=0;
+  const binL=audioCtx.createOscillator();binL.type='sine';binL.frequency.value=root-BINAURAL_OFFSET;
+  const binR=audioCtx.createOscillator();binR.type='sine';binR.frequency.value=root+BINAURAL_OFFSET;
+  const pL=audioCtx.createStereoPanner();pL.pan.value=-1;
+  const pR=audioCtx.createStereoPanner();pR.pan.value=1;
+  binL.connect(pL);pL.connect(binG);
+  binR.connect(pR);pR.connect(binG);
+  binG.connect(vFilter);
+  binL.start();binR.start();
+  layers.binaural={gain:binG,oscs:[binL,binR]};
+
+  // ── 4. WIND: bandpass-filtered noise at root freq ──
+  const windG=audioCtx.createGain();windG.gain.value=0;
+  const windF=audioCtx.createBiquadFilter();windF.type='bandpass';windF.frequency.value=root;windF.Q.value=8;
+  const windSrc=audioCtx.createBufferSource();windSrc.buffer=noiseBuffer;windSrc.loop=true;
+  windSrc.connect(windF);windF.connect(windG);windG.connect(vFilter);
+  windSrc.start();
+  layers.wind={gain:windG,filter:windF,src:windSrc};
+
+  // ── 5. COSMIC PAD: triangle wave octave up, very slow LFO on filter ──
+  const padG=audioCtx.createGain();padG.gain.value=0;
+  const padO=audioCtx.createOscillator();padO.type='triangle';padO.frequency.value=root*2;
+  const padF=audioCtx.createBiquadFilter();padF.type='lowpass';padF.frequency.value=600;padF.Q.value=3;
+  const padLFO=audioCtx.createOscillator();padLFO.type='sine';padLFO.frequency.value=0.08;
+  const padLFOG=audioCtx.createGain();padLFOG.gain.value=400;
+  padLFO.connect(padLFOG);padLFOG.connect(padF.frequency);
+  padO.connect(padF);padF.connect(padG);padG.connect(vFilter);
+  padO.start();padLFO.start();
+  layers.pad={gain:padG,osc:padO,filter:padF};
+
+  // ── Piano attack transient on creation ──
+  const t=audioCtx.currentTime;
+  vGain.gain.setTargetAtTime(0.15,t,0.01);
+  celloG.gain.setTargetAtTime(0.12,t,0.01);
+  gongG.gain.setTargetAtTime(0.10,t,0.01);
+  binG.gain.setTargetAtTime(0.06,t,0.01);
+  // piano-like fast attack, slow decay
+  setTimeout(()=>{
+    if(!audioCtx)return;
+    const t2=audioCtx.currentTime;
+    celloG.gain.setTargetAtTime(0.04,t2,0.8);
+    gongG.gain.setTargetAtTime(0.03,t2,1.2);
+  },80);
+
+  const voice={layers,vFilter,vGain,root,note,idx};
+  voices[idx]=voice;
+  return voice;
+}
+
+function updateAudio(){
+  if(!audioCtx||!attractors.length)return;
+  const t=audioCtx.currentTime;
+  let totalActivity=0;
+  const pA=Math.min(1,pressure);
+
+  // pressure opens the full orchestra (filter sweep 300 → 6000Hz)
+  const filterTarget=300+pA*5700;
+
+  for(let i=0;i<attractors.length;i++){
+    const v=ensureVoice(i);
+    const a=attractors[i];
+
+    // particle proximity + velocity
+    let near=0,totalSpd=0;
+    for(const p of particles){
+      if(p.dead)continue;
+      const dx=p.x-a.x,dy=p.y-a.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<350){near++;totalSpd+=Math.sqrt(p.vx*p.vx+p.vy*p.vy);}
+    }
+    const avgSpd=near>0?totalSpd/near:0;
+    const activity=Math.min(1,near/50);
+    totalActivity+=activity;
+
+    // voice gain: long sustain (time constant 0.6s rise, implied by activity)
+    v.vGain.gain.setTargetAtTime(activity*0.14+0.005,t,0.6);
+
+    // filter sweep
+    v.vFilter.frequency.setTargetAtTime(filterTarget,t,0.25);
+    v.vFilter.Q.setTargetAtTime(1.2+activity*3.5+pressure*2,t,0.4);
+
+    // ── Layer mixing based on pressure + activity ──
+    const L=v.layers;
+
+    // cello: always present, louder with activity
+    L.cello.gain.gain.setTargetAtTime(0.02+activity*0.08,t,0.5);
+    // vibrato depth increases with speed
+    // (already connected, just modulating base gain)
+
+    // gong: rings on activity, sustains very long
+    L.gong.gain.gain.setTargetAtTime(activity*0.06+pA*0.03,t,0.8);
+    // gong partials detune slightly with particle velocity (shimmer)
+    for(let j=0;j<L.gong.partials.length;j++){
+      const gp=L.gong.partials[j];
+      const detune=(avgSpd-1)*j*0.4;
+      gp.osc.frequency.setTargetAtTime(v.root*GONG_RATIOS[j]+detune,t,0.15);
+    }
+
+    // binaural: emerges with pressure (meditation deepening)
+    L.binaural.gain.gain.setTargetAtTime(pA*0.08+activity*0.02,t,0.4);
+
+    // wind: whispers with high particle speed, louder with pressure
+    const windLevel=Math.min(0.06,avgSpd*0.008+pA*0.02);
+    L.wind.gain.gain.setTargetAtTime(windLevel,t,0.3);
+    L.wind.filter.Q.setTargetAtTime(4+pressure*12,t,0.2);
+
+    // cosmic pad: blooms with pressure
+    L.pad.gain.gain.setTargetAtTime(pA*0.07+activity*0.01,t,0.5);
+  }
+
+  // cross-resonance: consonant voice pairs get sustain boost
+  for(let i=0;i<voices.length;i++){
+    if(!voices[i])continue;
+    for(let j=i+1;j<voices.length;j++){
+      if(!voices[j])continue;
+      const ratio=voices[i].root/voices[j].root;
+      const consonances=[1,2,0.5,3/2,2/3,4/3,3/4,5/4,4/5,5/3,3/5];
+      for(const c of consonances){
+        if(Math.abs(ratio-c)<c*0.04){
+          voices[i].vGain.gain.setTargetAtTime(
+            Math.min(0.2,voices[i].vGain.gain.value+0.01),t,0.8);
+          voices[j].vGain.gain.setTargetAtTime(
+            Math.min(0.2,voices[j].vGain.gain.value+0.01),t,0.8);
+          break;
+        }
+      }
+    }
+  }
+
+  // drone: swells slowly, deep presence
+  droneNodes.gain.gain.setTargetAtTime(Math.min(0.05,totalActivity*0.015+0.003),t,1.0);
+  droneNodes.filter.frequency.setTargetAtTime(60+pA*80,t,0.5);
+
+  // master: controlled, never harsh
+  masterGain.gain.setTargetAtTime(Math.min(0.32,totalActivity*0.06+pA*0.06+0.01),t,0.5);
+
+  // reverb deepens with pressure (longer sustain trails)
+  fb1.gain.setTargetAtTime(0.45+pA*0.18,t,0.3);
+  fb2.gain.setTargetAtTime(0.32+pA*0.2,t,0.3);
+}
+
+// absorption: gong ring + pitch dive, very long sustain tail
+function absorbTone(aIdx){
+  if(!audioCtx||!voices[aIdx])return;
+  const v=voices[aIdx],t=audioCtx.currentTime;
+  const L=v.layers;
+  // gong strike: spike all partials, ring for 4+ seconds
+  L.gong.gain.gain.setTargetAtTime(0.18,t,0.01);
+  L.gong.gain.gain.setTargetAtTime(0.02,t+0.5,1.8);
+  // cello pitch dive (nimeṣa) and slow return
+  for(const o of L.cello.oscs){
+    if(o.type==='sine'){
+      const base=o.frequency.value;
+      o.frequency.setTargetAtTime(base*0.5,t,0.04);
+      o.frequency.setTargetAtTime(base,t+0.8,0.6);
+    }
+  }
+  // binaural pulse spike
+  L.binaural.gain.gain.setTargetAtTime(0.12,t,0.01);
+  L.binaural.gain.gain.setTargetAtTime(0.02,t+0.3,1.5);
+}
+
+/* ═══════════════════════════════════════════════
+   PRESSURE / HOLD STATE
+   ═══════════════════════════════════════════════ */
+let holding=false,holdStart=0,holdX=0,holdY=0;
+// Tunnel zoom: grows exponentially each frame while holding (independent of pressure)
+let tunnelZ=1.0,tunnelCx=0,tunnelCy=0;
+let tunnelDriftAng=0; // angle for spiral drift
+let resettleDamping=0;
+
+/* ═══════════════════════════════════════════════
+   ORIGINAL WEBGL ENGINE (Mandelbrot-modulated gravity)
+   ═══════════════════════════════════════════════ */
+let W,H;
+function resize(){
+  W=canvas.width=canvas.offsetWidth||window.innerWidth;
+  H=canvas.height=canvas.offsetHeight||window.innerHeight;
+  if(W<1)W=window.innerWidth;if(H<1)H=window.innerHeight;
+  zc.width=W;zc.height=H;tgl.viewport(0,0,W,H);
+  gl.viewport(0,0,W,H);
+  initTrailFBs();bgDirty=true;needsClear=true;
+}
+requestAnimationFrame(()=>{resize();});
+window.addEventListener('resize',resize);
+
+function mkS(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+function mkP(v,f){const p=gl.createProgram();gl.attachShader(p,mkS(gl.VERTEX_SHADER,v));gl.attachShader(p,mkS(gl.FRAGMENT_SHADER,f));gl.linkProgram(p);return p;}
+
+const bgProg=mkP(
+`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0,1);}`,
+`precision highp float;
+uniform vec2 u_res;uniform int u_n;
+uniform vec2 u_att[16];uniform float u_mass[16];
+void main(){
+  if(u_n==0){gl_FragColor=vec4(0,0,0,1);return;}
+  vec2 pos=gl_FragCoord.xy;float totalField=0.0,potential=0.0;
+  for(int i=0;i<16;i++){
+    if(i>=u_n)break;
+    vec2 d=pos-u_att[i];float r=length(d)+1.0;
+    potential+=u_mass[i]/(r*0.7);
+    float scale=max(u_mass[i]*0.06,70.0);
+    vec2 c=d/scale;vec2 z=vec2(0.0);float it=0.0;
+    for(float n=0.0;n<40.0;n++){if(dot(z,z)>4.0)break;z=vec2(z.x*z.x-z.y*z.y+c.x,2.0*z.x*z.y+c.y);it=n+1.0;}
+    float sm=it;if(dot(z,z)>4.0){sm=it-log(log(length(z))/log(2.0))/log(2.0);}
+    float iN=sm/40.0;float boundary=iN*(1.0-iN)*4.0;
+    float w=u_mass[i]/(r*0.5+280.0);totalField+=boundary*w;
+    if(it>=40.0){totalField+=w*0.12;}
+  }
+  float f=totalField*0.003;vec3 col=vec3(f*0.15,f*0.12,f*0.30);
+  float warm=max(f-0.002,0.0)*10.0;col.r+=warm*0.05;col.g+=warm*0.03;
+  float bh=exp(-potential*0.00032);col*=bh;
+  float ring=exp(-potential*0.00018)-exp(-potential*0.00055);
+  col+=vec3(0.02,0.014,0.006)*max(ring,0.0)*2.2;
+  vec2 uv=(gl_FragCoord.xy/u_res)*2.0-1.0;col*=1.0-dot(uv,uv)*0.18;
+  gl_FragColor=vec4(max(col,vec3(0)),1.0);
+}`);
+
+const blitProg=mkP(
+`attribute vec2 a_pos;varying vec2 v_uv;void main(){v_uv=(a_pos+1.0)*0.5;gl_Position=vec4(a_pos,0,1);}`,
+`precision mediump float;uniform sampler2D u_tex;uniform float u_alpha;varying vec2 v_uv;
+void main(){vec4 c=texture2D(u_tex,v_uv);gl_FragColor=vec4(c.rgb,c.a*u_alpha);}`);
+
+const fadeProg=mkP(
+`attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0,1);}`,
+`precision mediump float;uniform vec4 u_color;void main(){gl_FragColor=u_color;}`);
+
+const ptProg=mkP(
+`attribute vec2 a_pos;attribute vec3 a_col;attribute float a_sz;
+uniform vec2 u_res;varying vec3 v_col;
+void main(){vec2 c=(a_pos/u_res)*2.0-1.0;c.y=-c.y;gl_Position=vec4(c,0,1);gl_PointSize=a_sz;v_col=a_col;}`,
+`precision mediump float;varying vec3 v_col;
+void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;
+float a=1.0-smoothstep(0.0,0.5,d);gl_FragColor=vec4(v_col,a*a);}`);
+
+const quadBuf=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+
+let bgDirty=true;
+const bgFB=gl.createFramebuffer(),bgTex=gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D,bgTex);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+
+let trailFB=[null,null],trailTex=[null,null],trailIdx=0;
+function initTrailFBs(){
+  for(let i=0;i<2;i++){
+    if(trailFB[i])gl.deleteFramebuffer(trailFB[i]);
+    if(trailTex[i])gl.deleteTexture(trailTex[i]);
+    trailTex[i]=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,trailTex[i]);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,W,H,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    trailFB[i]=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,trailFB[i]);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,trailTex[i],0);
+  }
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+}
+
+function bindQuad(prog){const pl=gl.getAttribLocation(prog,'a_pos');gl.bindBuffer(gl.ARRAY_BUFFER,quadBuf);gl.enableVertexAttribArray(pl);gl.vertexAttribPointer(pl,2,gl.FLOAT,false,0,0);}
+function drawFadeQuad(r,g,b,a){gl.useProgram(fadeProg);bindQuad(fadeProg);gl.uniform4f(gl.getUniformLocation(fadeProg,'u_color'),r,g,b,a);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);}
+function drawBlitQuad(tex,alpha){gl.useProgram(blitProg);bindQuad(blitProg);gl.bindTexture(gl.TEXTURE_2D,tex);gl.uniform1i(gl.getUniformLocation(blitProg,'u_tex'),0);gl.uniform1f(gl.getUniformLocation(blitProg,'u_alpha'),alpha);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);}
+
+let globalTime=0;
+function renderBg(){
+  gl.bindTexture(gl.TEXTURE_2D,bgTex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,W,H,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,bgFB);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,bgTex,0);
+  gl.viewport(0,0,W,H);gl.disable(gl.BLEND);gl.useProgram(bgProg);bindQuad(bgProg);
+  gl.uniform2f(gl.getUniformLocation(bgProg,'u_res'),W,H);
+  gl.uniform1i(gl.getUniformLocation(bgProg,'u_n'),attractors.length);
+  const ap=[],am=[];
+  for(let i=0;i<16;i++){ap.push(i<attractors.length?attractors[i].x:0,i<attractors.length?attractors[i].y:0);am.push(i<attractors.length?attractors[i].mass:0);}
+  gl.uniform2fv(gl.getUniformLocation(bgProg,'u_att'),ap);
+  gl.uniform1fv(gl.getUniformLocation(bgProg,'u_mass'),am);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,W,H);bgDirty=false;
+}
+
+const attractors=[];const MERGE_R=55;
+function addAttractor(x,y){
+  for(const a of attractors){const dx=a.x-x,dy=a.y-y;if(Math.sqrt(dx*dx+dy*dy)<MERGE_R){a.mass+=500+Math.random()*400;a.r=Math.min(a.r+1,35);a.hits++;bgDirty=true;return a;}}
+  if(attractors.length>=16)attractors.shift();
+  const a={x,y,mass:1400+Math.random()*800,r:10,hits:1};attractors.push(a);bgDirty=true;return a;
+}
+
+const particles=[];let absorbed=0,escaped=0;const MAX_P=6000;
+function spawnAround(ox,oy,n,spread){
+  const sp=spread||Math.min(W,H)*0.22;
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,d=20+Math.random()*sp,ta=a+Math.PI*0.5+(Math.random()-0.5)*0.5,speed=0.12+Math.random()*0.5;
+    particles.push({x:ox+Math.cos(a)*d,y:oy+Math.sin(a)*d,vx:Math.cos(ta)*speed,vy:Math.sin(ta)*speed,fate:0,age:0,dead:false});}
+}
+function scatter(ox,oy){for(let i=0;i<100;i++){const a=Math.random()*Math.PI*2,d=8+Math.random()*Math.min(W,H)*0.36;particles.push({x:ox+Math.cos(a)*d,y:oy+Math.sin(a)*d,vx:(Math.random()-0.5)*1.2,vy:(Math.random()-0.5)*1.2,fate:0,age:0,dead:false});}}
+
+const M_ITER=10;
+function stepParticle(p){
+  if(p.dead||!attractors.length)return;
+  let ax=0,ay=0,minD=1e9,nearA=null,nearIdx=0;
+  for(let i=0;i<attractors.length;i++){
+    const a=attractors[i],dx=a.x-p.x,dy=a.y-p.y,r=Math.sqrt(dx*dx+dy*dy)+1;
+    if(r<minD){minD=r;nearA=a;nearIdx=i;}
+    if(r<a.r){p.dead=true;p.fate=1;absorbed++;a.mass+=1.5;absorbTone(i);return;}
+    const scale=Math.max(a.mass*0.06,70),cr=(p.x-a.x)/scale,ci=(p.y-a.y)/scale;
+    let zr=0,zi=0,iter=0;
+    for(let n=0;n<M_ITER;n++){const zr2=zr*zr,zi2=zi*zi;if(zr2+zi2>4)break;const nzr=zr2-zi2+cr;zi=2*zr*zi+ci;zr=nzr;iter=n+1;}
+    const iterNorm=iter/M_ITER,grav=a.mass/(r*r+180),mod=0.2+iterNorm*0.8;
+    const nx=dx/r,ny=dy/r,tx=-ny,ty=nx;
+    const zmag=Math.sqrt(zr*zr+zi*zi)+0.001,znx=zr/zmag,zny=zi/zmag;
+    ax+=nx*grav*mod*0.52+tx*grav*mod*0.42+znx*grav*iterNorm*0.08;
+    ay+=ny*grav*mod*0.52+ty*grav*mod*0.42+zny*grav*iterNorm*0.08;
+  }
+  // extra damping during resettle
+  const damp=0.988-resettleDamping*0.04;
+  p.vx=p.vx*damp+ax*0.055;p.vy=p.vy*damp+ay*0.055;
+  const sp=Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+  if(sp>5){p.vx*=5/sp;p.vy*=5/sp;}
+  p.x+=p.vx;p.y+=p.vy;p.age++;
+  if(nearA&&minD<nearA.r*3)p.fate=1;
+  else if(sp>2.5&&minD>250)p.fate=2;
+  else p.fate=0;
+  const cx=p.x-W/2,cy=p.y-H/2;
+  if(Math.sqrt(cx*cx+cy*cy)>Math.max(W,H)*0.88){p.dead=true;p.fate=2;escaped++;}
+  if(p.age>3500)p.dead=true;
+}
+
+const posBuf=gl.createBuffer(),colBuf=gl.createBuffer(),szBuf=gl.createBuffer();
+const posArr=new Float32Array(MAX_P*2),colArr=new Float32Array(MAX_P*3),szArr=new Float32Array(MAX_P);
+function minDist(p){let md=1e9;for(const a of attractors){const dx=a.x-p.x,dy=a.y-p.y,d=Math.sqrt(dx*dx+dy*dy);if(d<md)md=d;}return md;}
+function drawParticles(){
+  let n=0;
+  // zoom-depth colour shift — particles cycle through hues as fractal dives deeper
+  const zp=Math.log10(Math.max(1,tunnelZ))*0.22;
+  const zA=Math.min(1,pressure)*0.28; // strength tied to hold
+  const zR=Math.cos(zp)*zA,zG=Math.cos(zp+2.094)*zA,zB=Math.cos(zp+4.189)*zA;
+  for(let i=0;i<particles.length&&n<MAX_P;i++){
+    const p=particles[i];if(p.dead)continue;
+    posArr[n*2]=p.x;posArr[n*2+1]=p.y;
+    const sp=Math.sqrt(p.vx*p.vx+p.vy*p.vy),s=Math.min(1,sp/3);
+    const af=Math.min(1,p.age/25)*Math.max(0.04,1-(p.age-3000)/500);
+    if(p.fate===1){const md=minDist(p),heat=Math.max(0,1-md/200);colArr[n*3]=Math.min(1,0.45+s*0.25+heat*0.20+zR);colArr[n*3+1]=Math.min(1,0.35+s*0.18+heat*0.05+zG);colArr[n*3+2]=Math.min(1,0.18+s*0.06+zB);szArr[n]=(1.3+s*1.6+heat*0.8)*af;}
+    else if(p.fate===2){colArr[n*3]=Math.min(1,0.30+s*0.12+zR);colArr[n*3+1]=Math.min(1,0.30+s*0.12+zG);colArr[n*3+2]=Math.min(1,0.35+s*0.10+zB);szArr[n]=(0.9+s*0.6)*af;}
+    else{colArr[n*3]=Math.min(1,0.28+s*0.22+zR);colArr[n*3+1]=Math.min(1,0.34+s*0.20+zG);colArr[n*3+2]=Math.min(1,0.48+s*0.18+zB);szArr[n]=(1.0+s*0.7)*af;}
+    n++;
+  }
+  if(n===0)return;
+  gl.useProgram(ptProg);gl.uniform2f(gl.getUniformLocation(ptProg,'u_res'),W,H);
+  gl.bindBuffer(gl.ARRAY_BUFFER,posBuf);gl.bufferData(gl.ARRAY_BUFFER,posArr.subarray(0,n*2),gl.DYNAMIC_DRAW);
+  const pL=gl.getAttribLocation(ptProg,'a_pos');gl.enableVertexAttribArray(pL);gl.vertexAttribPointer(pL,2,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,colBuf);gl.bufferData(gl.ARRAY_BUFFER,colArr.subarray(0,n*3),gl.DYNAMIC_DRAW);
+  const cL=gl.getAttribLocation(ptProg,'a_col');gl.enableVertexAttribArray(cL);gl.vertexAttribPointer(cL,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,szBuf);gl.bufferData(gl.ARRAY_BUFFER,szArr.subarray(0,n),gl.DYNAMIC_DRAW);
+  const sL=gl.getAttribLocation(ptProg,'a_sz');gl.enableVertexAttribArray(sL);gl.vertexAttribPointer(sL,1,gl.FLOAT,false,0,0);
+  gl.drawArrays(gl.POINTS,0,n);
+}
+
+/* ═══════════════════════════════════════════════
+   MANDELBROT TUNNEL RENDERER (WebGL GPU · ds-double · infinite zoom)
+   ═══════════════════════════════════════════════ */
+function renderTunnel(){
+  if(pressure<0.01&&tunnelZ<1.5){zc.classList.remove('active');return;}
+  zc.classList.add('active');
+  // tunnelZ grows exponentially each frame — gives true continuous infinite zoom
+  const scale=3.5/tunnelZ;
+  const[scHi,scLo]=jsSplit(scale);
+  const[cxHi,cxLo]=jsSplit(tunnelCx);
+  const[cyHi,cyLo]=jsSplit(tunnelCy);
+  // maxIter scales with log of zoom depth for crisp detail at all depths
+  const zoomLog=Math.log10(Math.max(1,tunnelZ));
+  const maxIter=Math.min(900,Math.floor(80+zoomLog*70));
+  const opacity=Math.min(0.52,pressure*0.85);
+  tgl.viewport(0,0,zc.width,zc.height);
+  tgl.clearColor(0,0,0,0);tgl.clear(tgl.COLOR_BUFFER_BIT);
+  tgl.useProgram(tProg);
+  tgl.bindBuffer(tgl.ARRAY_BUFFER,tQuad);
+  tgl.enableVertexAttribArray(tAL);
+  tgl.vertexAttribPointer(tAL,2,tgl.FLOAT,false,0,0);
+  tgl.uniform2f(tU.res,zc.width,zc.height);
+  tgl.uniform2f(tU.cxDS,cxHi,cxLo);
+  tgl.uniform2f(tU.cyDS,cyHi,cyLo);
+  tgl.uniform2f(tU.scDS,scHi,scLo);
+  tgl.uniform1f(tU.maxI,maxIter);
+  tgl.uniform1f(tU.time,globalTime);
+  tgl.uniform1f(tU.op,opacity);
+  tgl.drawArrays(tgl.TRIANGLE_STRIP,0,4);
+}
+
+/* ═══════════════════════════════════════════════
+   INTERACTION — pressure hold + zoom + audio
+   ═══════════════════════════════════════════════ */
+let needsClear=true;
+canvas.addEventListener('mousedown',function(e){
+  if(e.button===2)return;
+  initAudio();
+  const r=canvas.getBoundingClientRect();
+  holdX=e.clientX-r.left;holdY=e.clientY-r.top;
+  holdStart=performance.now();
+  holding=true;
+
+  // place attractor immediately
+  const first=attractors.length===0;
+  const att=addAttractor(holdX,holdY);
+  spawnAround(holdX,holdY,first?300:80,first?Math.min(W,H)*0.38:undefined);
+
+  // reset zoom; map canvas pixel → Mandelbrot coordinate (full set view)
+  tunnelZ=1.0;
+  tunnelDriftAng=Math.random()*Math.PI*2;
+  tunnelCx=-2.5+(holdX/W)*3.5;
+  tunnelCy=-1.25+(holdY/H)*2.5;
+});
+
+canvas.addEventListener('mouseup',function(){
+  if(!holding)return;
+  holding=false;
+  pressure=0;
+  resettleDamping=1; // apply damping pulse
+});
+
+canvas.addEventListener('mouseleave',function(){
+  holding=false;pressure=0;
+});
+
+canvas.addEventListener('contextmenu',function(e){
+  e.preventDefault();
+  initAudio();
+  const r=canvas.getBoundingClientRect();
+  scatter(e.clientX-r.left,e.clientY-r.top);
+});
+
+// touch support — all listeners passive; scroll locking via CSS touch-action only
+canvas.style.touchAction='pan-y'; // allow vertical scroll by default
+let _touchTimer=null,_touchScrolled=false,_txStart=0,_tyStart=0;
+canvas.addEventListener('touchstart',function(e){
+  const tc=e.touches[0],r=canvas.getBoundingClientRect();
+  _txStart=tc.clientX;_tyStart=tc.clientY;
+  _touchScrolled=false;
+  holdX=tc.clientX-r.left;holdY=tc.clientY-r.top;
+  clearTimeout(_touchTimer);
+  _touchTimer=setTimeout(function(){
+    if(_touchScrolled)return;
+    initAudio();
+    holdStart=performance.now();holding=true;
+    canvas.style.touchAction='none'; // lock scroll during fractal hold
+    const first=attractors.length===0;
+    const att=addAttractor(holdX,holdY);
+    spawnAround(holdX,holdY,first?300:80,first?Math.min(W,H)*0.38:undefined);
+    tunnelZ=1.0;
+    tunnelDriftAng=Math.random()*Math.PI*2;
+    tunnelCx=-2.5+(holdX/W)*3.5;
+    tunnelCy=-1.25+(holdY/H)*2.5;
+  },160);
+},{passive:true});
+canvas.addEventListener('touchmove',function(e){
+  if(holding)return; // touch-action:none already blocks scroll; nothing to do
+  const dx=e.touches[0].clientX-_txStart,dy=e.touches[0].clientY-_tyStart;
+  if(dx*dx+dy*dy>100){_touchScrolled=true;clearTimeout(_touchTimer);}
+},{passive:true}); // fully passive — browser never waits for us
+canvas.addEventListener('touchend',function(){
+  clearTimeout(_touchTimer);
+  holding=false;pressure=0;resettleDamping=1;
+  canvas.style.touchAction='pan-y'; // restore scroll immediately on release
+},{passive:true});
+
+/* ═══════════════════════════════════════════════
+   MAIN LOOP
+   ═══════════════════════════════════════════════ */
+let tick=0;
+function loop(){
+  tick++;globalTime=tick*0.016;
+
+  // pressure accumulation during hold
+  if(holding){
+    const dur=(performance.now()-holdStart)/1000;
+    pressure=Math.min(6,dur/3); // uncapped: enables 10^13+ zoom
+    // continuous deepening of the attractor during hold
+    if(tick%6===0){
+      for(const a of attractors){
+        const dx=a.x-holdX,dy=a.y-holdY;
+        if(Math.sqrt(dx*dx+dy*dy)<MERGE_R){
+          a.mass+=Math.min(1,pressure)*30;
+          bgDirty=true;
+        }
+      }
+    }
+  }else{
+    pressure*=0.92; // decay after release
+  }
+
+  // ── Continuous infinite zoom: exponential growth each frame ──────────────
+  if(holding){
+    tunnelZ*=1.018; // ~1.8% per frame → doubles every ~39 frames at 60fps
+    // spiral drift: proportional to current view size → constant apparent screen motion
+    tunnelDriftAng+=0.007;
+    const viewSize=3.5/tunnelZ; // current Mandelbrot units visible
+    const driftR=viewSize*0.0018; // 0.18% of view per frame ≈ gentle spiral
+    tunnelCx+=Math.cos(tunnelDriftAng)*driftR;
+    tunnelCy+=Math.sin(tunnelDriftAng)*driftR;
+  }else{
+    tunnelZ=Math.max(1,tunnelZ*0.88); // decay zoom when released
+  }
+
+  // resettle damping decays
+  if(resettleDamping>0)resettleDamping*=0.97;
+
+  // step particles
+  for(const p of particles)stepParticle(p);
+  for(let i=particles.length-1;i>=0;i--){if(particles[i].dead)particles.splice(i,1);}
+
+  // continuous spawn
+  if(tick%10===0&&attractors.length>0&&particles.length<MAX_P*0.85){
+    const a=attractors[Math.floor(Math.random()*attractors.length)];
+    spawnAround(a.x,a.y,4,Math.min(W,H)*0.16);
+  }
+  while(particles.length>MAX_P)particles.shift();
+
+  if(bgDirty)renderBg();
+
+  // trail ping-pong
+  const src=trailIdx,dst=1-trailIdx;
+  gl.bindFramebuffer(gl.FRAMEBUFFER,trailFB[dst]);gl.viewport(0,0,W,H);
+  if(needsClear){gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);needsClear=false;}
+  gl.disable(gl.BLEND);
+  gl.useProgram(blitProg);bindQuad(blitProg);
+  gl.bindTexture(gl.TEXTURE_2D,trailTex[src]);
+  gl.uniform1i(gl.getUniformLocation(blitProg,'u_tex'),0);
+  gl.uniform1f(gl.getUniformLocation(blitProg,'u_alpha'),1.0);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  drawFadeQuad(0,0,0,0.014);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE);drawParticles();
+  gl.disable(gl.BLEND);trailIdx=dst;
+
+  // composite
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,W,H);
+  gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.disable(gl.BLEND);drawBlitQuad(bgTex,1.0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+  drawBlitQuad(trailTex[trailIdx],1.0);
+  gl.disable(gl.BLEND);
+
+  // Mandelbrot tunnel overlay — every frame, no pause
+  renderTunnel();
+
+  // audio update
+  if(tick%3===0)updateAudio();
+
+  // stats
+  let orb=0;for(const p of particles)if(!p.dead&&p.fate===0)orb++;
+  document.getElementById('sO').textContent=orb;
+  document.getElementById('sA').textContent=absorbed.toLocaleString();
+  document.getElementById('sE').textContent=escaped.toLocaleString();
+  document.getElementById('sN').textContent=attractors.length;
+
+  requestAnimationFrame(loop);
+}
+
+loop();
+})();
+</script>
+
+</body>
+</html>
