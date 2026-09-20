@@ -25,7 +25,7 @@ const strips = [
   { 
     id: "cyma", 
     title: "CYMA", 
-    summary: "Sound made visible.", 
+    summary: "Digital water studio.", 
     type: "project", 
     href: "/cyma", 
     bgClass: "ink-blot-cyma", 
@@ -34,7 +34,7 @@ const strips = [
   { 
     id: "kleam", 
     title: "KLEAM.AI", 
-    summary: "Multi-model deliberation arena.", 
+    summary: "Voice-giving AI persona.", 
     type: "expand", 
     bgClass: "ink-blot-kleam", 
     color: "#21e6b3" 
@@ -59,16 +59,8 @@ export default function ArtistPage() {
         
         <div className="flex items-center gap-3 backdrop-blur-md bg-black/30 px-6 py-2.5 rounded-full border border-white/10">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#ff7ab8] shadow-[0_0_10px_#ff7ab8]" />
-          <span className="font-display font-semibold text-sm tracking-[0.2em] uppercase"
-            style={{
-              background: "linear-gradient(108deg, #ffcf6b, #ff7ab8, #ffcf6b)",
-              backgroundSize: "300% 100%",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              animation: "auraDrift 9s ease-in-out infinite",
-            }}>
-            Snieaks
+          <span className="font-sans font-semibold text-[11px] tracking-[0.2em] uppercase text-white/80">
+            Digital Arts
           </span>
         </div>
       </header>
@@ -90,7 +82,11 @@ export default function ArtistPage() {
                 scale: isDimmed ? 0.98 : 1
               }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative w-full rounded-[28px] border border-white/[0.08] overflow-hidden cursor-pointer ink-bg-container ${strip.bgClass} shadow-2xl`}
+              className={`group relative w-full rounded-[28px] border border-white/[0.12] overflow-hidden cursor-pointer molten-bg-container ${strip.bgClass} shadow-2xl`}
+              style={{
+                 boxShadow: `0 20px 40px -10px ${strip.color}20, inset 0 1px 1px rgba(255,255,255,0.15)`,
+                 backdropFilter: "blur(20px)",
+              }}
               tabIndex={0}
               role="button"
               onKeyDown={(e) => {
@@ -104,56 +100,58 @@ export default function ArtistPage() {
               }}
               data-testid={`strip-${strip.id}`}
             >
-              {/* Bioluminescent Ink Blots */}
-              <div className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-700 opacity-60 group-hover:opacity-100">
-                 <div className="ink-blob ink-blob-1" />
-                 <div className="ink-blob ink-blob-2" />
+              {/* Molten Neon Fluids */}
+              <div className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-700 opacity-60 group-hover:opacity-100"
+                   style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)" }}>
+                 <div className="molten-fluid-container">
+                   <div className="molten-layer molten-layer-1" />
+                   <div className="molten-layer molten-layer-2" />
+                   <div className="molten-layer molten-layer-3" />
+                 </div>
               </div>
 
               {/* Dark overlay for readability */}
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700 z-0" />
+              <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-700 z-0" />
 
-              <div className="relative min-h-[140px] md:min-h-[160px] z-10 flex flex-col">
+              <div className="relative z-10 flex flex-col items-center justify-center text-center">
                 
-                {/* Header Row (always visible) */}
-                <div className="h-[140px] md:h-[160px] flex items-center justify-between px-6 md:px-12 pointer-events-none">
+                {/* Header Row */}
+                <div className="flex flex-col items-center justify-center px-6 md:px-12 py-10 md:py-12 pointer-events-none w-full">
                   
-                  <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-                    <motion.h2 
-                      layout="position"
-                      className="font-display font-semibold uppercase m-0 leading-none"
-                      animate={{ 
-                        fontSize: isExpanded ? "clamp(34px, 5.5vw, 68px)" : "clamp(26px, 4vw, 44px)",
-                        letterSpacing: isExpanded ? "0.1em" : "0.15em",
-                      }}
-                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                      style={{ color: strip.color, textShadow: `0 0 40px ${strip.color}55` }}
-                    >
-                      {strip.title}
-                    </motion.h2>
-                    
-                    <AnimatePresence>
-                      {!isExpanded && (
-                        <motion.span 
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -10 }}
-                          transition={{ duration: 0.3 }}
-                          className="font-sans font-light text-white/70 tracking-widest text-[11px] md:text-[12px] uppercase mt-1 md:mt-0"
-                        >
-                          {strip.summary}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  <motion.h2 
+                    layout="position"
+                    className="font-sans font-bold uppercase m-0 leading-none metallic-text mb-3"
+                    animate={{ 
+                      fontSize: isExpanded ? "clamp(34px, 5.5vw, 68px)" : "clamp(26px, 4vw, 44px)",
+                      letterSpacing: isExpanded ? "0.15em" : "0.3em",
+                    }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ "--glow": strip.color } as any}
+                  >
+                    {strip.title}
+                  </motion.h2>
+                  
+                  <AnimatePresence>
+                    {!isExpanded && (
+                      <motion.span 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="font-sans font-light text-white/70 tracking-widest text-[11px] md:text-[12px] uppercase mb-4"
+                      >
+                        {strip.summary}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
 
                   {/* Expand Indicator */}
                   <motion.div 
                     animate={{ rotate: isExpanded ? 180 : 0 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/50 backdrop-blur-md bg-black/20 group-hover:bg-white/10 group-hover:text-white transition-colors duration-300 shrink-0 ml-4 pointer-events-auto"
+                    className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/50 backdrop-blur-md bg-white/5 group-hover:bg-white/15 group-hover:text-white transition-colors duration-300 pointer-events-auto mt-2 shadow-[0_0_15px_rgba(255,255,255,0.05)]"
                   >
-                    <ChevronDown size={20} strokeWidth={1.2} />
+                    <ChevronDown size={18} strokeWidth={1.5} />
                   </motion.div>
                 </div>
 
@@ -165,12 +163,12 @@ export default function ArtistPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                      className="px-6 md:px-12 pb-10 flex flex-col pointer-events-auto"
+                      className="px-6 md:px-12 pb-12 flex flex-col items-center pointer-events-auto w-full"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {strip.type === "project" && (
-                        <div className="mt-4 flex flex-col items-start gap-8 border-t border-white/10 pt-8">
-                          <p className="text-[clamp(17px,2vw,22px)] leading-[1.6] text-white/80 max-w-2xl font-light">
+                        <div className="mt-2 flex flex-col items-center gap-8 border-t border-white/10 pt-10 w-full max-w-3xl">
+                          <p className="text-[clamp(17px,2vw,22px)] leading-[1.6] text-white/80 font-light text-center">
                             {strip.summary} Enter the full interactive work in its own space.
                           </p>
                           <Link
@@ -185,7 +183,7 @@ export default function ArtistPage() {
                       )}
 
                       {strip.type === "expand" && strip.id === "kleam" && (
-                        <div className="w-full mt-4 bg-black/50 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden flex flex-col shadow-2xl h-[65vh] min-h-[500px]">
+                        <div className="w-full mt-2 bg-black/60 backdrop-blur-2xl border border-white/15 rounded-2xl overflow-hidden flex flex-col shadow-2xl h-[65vh] min-h-[500px]">
                           <div className="flex justify-between items-center px-6 py-3.5 border-b border-white/10 bg-white/5">
                             <span className="text-[11px] tracking-[0.15em] uppercase text-white/60">Live Embed</span>
                             <a 

@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useAudio } from "./AudioContext";
 import { StaticDriftIllusion } from "./illusions/StaticDriftIllusion";
 import { MandalaNoiseIllusion } from "./illusions/MandalaNoiseIllusion";
-import { CharFade } from "./CharFade";
 
 type KriyaPhase = "idle" | "settle" | "in" | "hold" | "out" | "reveal" | "done";
 
@@ -56,6 +55,7 @@ export default function KriyaSection() {
   const [round, setRound] = useState(1);
   const [auraScale, setAuraScale] = useState(1);
   const [auraDuration, setAuraDuration] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
 
   const phaseRef = useRef(phase);
   const roundRef = useRef(round);
@@ -160,6 +160,25 @@ export default function KriyaSection() {
   }, [started, isInView, baseUrl, playSfx]);
 
   const lineText = kriyaLine(round, phase);
+  const lineWords = lineText.split(/\s+/).filter(Boolean);
+  const displayWord = lineWords[wordIndex] ?? "";
+
+  useEffect(() => {
+    setWordIndex(0);
+    if (lineWords.length <= 1) return;
+
+    const wordTimer = window.setInterval(() => {
+      setWordIndex((current) => {
+        if (current >= lineWords.length - 1) {
+          window.clearInterval(wordTimer);
+          return current;
+        }
+        return current + 1;
+      });
+    }, 380);
+
+    return () => window.clearInterval(wordTimer);
+  }, [lineText, lineWords.length]);
 
   // The aura steps aside for the illusions: dimmed over the drift field,
   // almost out during the void round so the afterimage owns the dark, low
@@ -211,26 +230,23 @@ export default function KriyaSection() {
         />
       )}
 
-      {/* The single text slot, hugging the still point so staring and
-          reading are the same act. It never moves. */}
-      <div className="absolute left-0 right-0 top-1/2 mt-5 z-20 flex justify-center px-6 pointer-events-none">
-        <div className="relative max-w-[300px] md:max-w-sm text-center">
-          {/* Soft pocket of dark so the ritual line stays legible now that
-              the pattern runs all the way to the still point. */}
-          <div className="absolute -inset-x-8 -inset-y-6 bg-[radial-gradient(ellipse_at_center,rgba(5,2,10,0.85)_0%,rgba(5,2,10,0.5)_55%,transparent_78%)]" />
-          {lineText && (
-            <motion.div
-              key={`${round}-${phase}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="relative font-serif italic text-xl md:text-2xl leading-snug text-white/75 [text-shadow:0_0_18px_rgba(5,2,10,0.95),0_0_6px_rgba(5,2,10,0.9)]"
-              data-testid="text-kriya-line"
+      {/* One word occupies the fixation point at a steady reading cadence. */}
+      <div className="absolute inset-0 z-40 flex items-center justify-center px-6 pointer-events-none">
+        <AnimatePresence mode="wait">
+          {displayWord && (
+            <motion.span
+              key={`${round}-${phase}-${wordIndex}-${displayWord}`}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ duration: 0.12 }}
+              className="relative min-w-[10ch] text-center font-serif italic text-2xl md:text-3xl leading-none text-white/90 [text-shadow:0_0_22px_rgba(5,2,10,1),0_0_9px_rgba(255,255,255,0.24)]"
+              data-testid="text-kriya-word"
             >
-              <CharFade text={lineText} stagger={0.05} />
-            </motion.div>
+              {displayWord}
+            </motion.span>
           )}
-        </div>
+        </AnimatePresence>
       </div>
 
     </section>

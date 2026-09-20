@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { CharFade } from "./CharFade";
 
-const BOOK_PURCHASE_URL = "https://snieaks.com";
+const BOOK_PURCHASE_URL = "/artist";
 
 export default function BookLandingSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,8 +68,6 @@ export default function BookLandingSection() {
 
           <a 
             href={BOOK_PURCHASE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
             className="group relative px-10 py-4 rounded-full overflow-hidden transition-all duration-500 mb-20 inline-block bg-[#fff8f0] text-black shadow-[0_0_40px_rgba(255,248,240,0.15)] hover:shadow-[0_0_60px_rgba(255,248,240,0.3)] hover:scale-105"
             data-testid="link-purchase-book"
           >

@@ -60,8 +60,8 @@ const stagger = {
 
 const stats = [
   { num: "11", label: "Systems Shipped", desc: "End-to-end products live in the world." },
-  { num: "5", label: "Organisations Transformed", desc: "M&T Bank · ATSA · JustShreem · Billion Readers · devipuram.org" },
-  { num: "7×", label: "Speed Uplift", desc: "Quality and velocity in the same body of work — the rarest combination." },
+  { num: "5", label: "Organisations Transformed", desc: "M&T Bank, ATSA, JustShreem, Billion Readers, devipuram.org" },
+  { num: "7×", label: "Speed Uplift", desc: "Quality and velocity in the same body of work." },
   { num: "2", label: "Tier-One Laboratories", desc: "Invisible Technologies supporting tier-one frontier artificial intelligence laboratories." },
 ];
 
@@ -72,7 +72,7 @@ const experience = [
     org: "M&T Bank",
     role: "Change Champion · Enterprise Reorg",
     color: "#34d8ee",
-    body: "Embedded during a critical period of organisational restructuring as M&T Bank scaled to its next tier. Translated executive strategy into ground-level behavioural change across thousands of employees — holding clarity, alignment, and momentum through institutional ambiguity. Change governance inside a regulated financial institution at scale.",
+    body: "Embedded during a critical period of organisational restructuring as M&T Bank scaled to its next tier. Translated executive strategy into ground-level behavioural change across thousands of employees, holding clarity, alignment, and momentum through institutional ambiguity. Change governance inside a regulated financial institution at scale.",
     chips: ["Enterprise Change Management", "Cross-Functional Alignment", "Financial Services", "Stakeholder Communication"],
   },
   {
@@ -81,7 +81,7 @@ const experience = [
     org: "Invisible Technologies",
     role: "Data Quality Assurance · Tier-One Frontier Artificial Intelligence Laboratories",
     color: "#a98bff",
-    body: "High-precision data quality assurance for text-to-vision model training pipelines through Invisible Technologies, supporting tier-one frontier artificial intelligence laboratories. Reviewing, annotating, and validating multimodal data at the boundary where human judgment shapes machine intelligence. Data quality at this level is not a support function — it is architecture.",
+    body: "High-precision data quality assurance for text-to-vision model training pipelines through Invisible Technologies, supporting tier-one frontier artificial intelligence laboratories. Reviewing, annotating, and validating multimodal data at the boundary where human judgment shapes machine intelligence. Data quality at this level operates as fundamental architecture.",
     chips: ["Invisible Technologies", "Multimodal AI", "Data QA", "Text-to-Vision", "AI Annotation"],
   },
   {
@@ -90,7 +90,7 @@ const experience = [
     org: "A Thousand Suns Academy",
     role: "Systems Architect · Product Owner",
     color: "#21e6b3",
-    body: "Approved and governed the production cloud architecture: Flutter (iOS + Android), AWS ALB, NestJS API, Cognito identity (OAuth 2.0 / SAML / JWT), RDS PostgreSQL, and an async media pipeline (S3 → Lambda → MediaConvert → CloudFront). Maintained the stack as the single source of truth across every revision. Built the Drive Transcriber pipeline — event recording to three viral-ready short clips in under 10 minutes. Surfaced production-infrastructure misalignments and held the line on data integrity when authority pushed back.",
+    body: "Approved and governed the production cloud architecture: Flutter (iOS + Android), AWS ALB, NestJS API, Cognito identity (OAuth 2.0 / SAML / JWT), RDS PostgreSQL, and an async media pipeline (S3 to Lambda to MediaConvert to CloudFront). Maintained the stack as the single source of truth across every revision. Built the Drive Transcriber pipeline, converting event recording to three viral-ready short clips in under 10 minutes. Surfaced production-infrastructure misalignments and held the line on data integrity when authority pushed back.",
     chips: ["AWS", "Flutter", "NestJS", "Cognito", "OAuth 2.0", "SAML", "JWT", "CloudFront", "Architecture Governance"],
   },
   {
@@ -99,7 +99,7 @@ const experience = [
     org: "JustShreem Labs",
     role: "Product Owner · AI Layer Architect",
     color: "#6f76ff",
-    body: "Product ownership of the JustShreem consumer mobile app from first architecture decision to live client surface. Researched and implemented Kommunicate as the conversational AI layer. Created the GoHighLevel AI bot from zero, surfaced it on the client homepage, and maintained the integration as the critical bridge between founders and production. Data integrity and strategic alignment held across chaotic organisational drift — through documentation, executive migration strategy, and communication frameworks that held the line when authority failed to.",
+    body: "Product ownership of the JustShreem consumer mobile app from first architecture decision to live client surface. Researched and implemented Kommunicate as the conversational AI layer. Created the GoHighLevel AI bot from zero, surfaced it on the client homepage, and maintained the integration as the critical bridge between founders and production. Data integrity and strategic alignment held across chaotic organisational drift through documentation, executive migration strategy, and communication frameworks that held the line when authority failed to.",
     chips: ["Product Ownership", "Conversational AI", "Kommunicate", "GoHighLevel", "Data Integrity", "Mobile"],
   },
   {
@@ -108,7 +108,7 @@ const experience = [
     org: "Billion Readers · BIRD",
     role: "Technology Strategist · Cultural Architect",
     color: "#ffcf6b",
-    body: "Architected and automated the operational systems that allowed Billion Readers to establish cross-country subtitling branches — culminating in a contracting relationship with Indian national television. The FirstSongs initiative uses AI tools including Suno to bring indigenous songs to professional audio quality and embed them in archival infrastructure designed for longevity. Monthly AI skill-share sessions — high engagement, concrete skill transfer — drove organisational adoption of Claude, Adobe Firefly, and Gemini, reshaping how a distributed nonprofit collaborates at scale.",
+    body: "Architected and automated the operational systems that allowed Billion Readers to establish cross-country subtitling branches, culminating in a contracting relationship with Indian national television. The FirstSongs initiative uses AI tools including Suno to bring indigenous songs to professional audio quality and embed them in archival infrastructure designed for longevity. Monthly AI skill-share sessions with high engagement and concrete skill transfer drove organisational adoption of Claude, Adobe Firefly, and Gemini, reshaping how a distributed nonprofit collaborates at scale.",
     chips: ["Systems Automation", "Indigenous Preservation", "Subtitling", "AI Skill-Share", "Claude", "Gemini", "Nonprofit Scale"],
   },
 ];
@@ -121,7 +121,7 @@ const projects = [
     url: "https://kleam.ai",
     color: "#a98bff",
     impact: "Multi-model AI deliberation. Custom .ai domain. Stripe-powered.",
-    narrative: "A 'Deliberation Arena' where distinct AI personas engage users in cross-model reasoning. Fractal landing animations, a full Stripe subscription and checkout flow, and a playground experience. The most architecturally complete Replit build — a multi-model AI product with its own brand identity, custom domain, and monetisation layer.",
+    narrative: "A 'Deliberation Arena' where distinct AI personas engage users in cross-model reasoning. Fractal landing animations, a full Stripe subscription and checkout flow, and a playground experience. The most architecturally complete Replit build: a multi-model AI product with its own brand identity, custom domain, and monetisation layer.",
     chips: ["Multi-Model AI", "Stripe", "Subscription", "AI Personas", "kleam.ai"],
   },
   {
@@ -130,8 +130,8 @@ const projects = [
     wave: "Automation Pipeline",
     url: "https://drivetranscribe.replit.app",
     color: "#21e6b3",
-    impact: "Event recording → 3 viral-ready clips in under 10 minutes.",
-    narrative: "Google Drive–authenticated transcription pipeline that watches a folder, runs AI transcription, and auto-identifies high-outreach viral moments from deep esoteric content — delivering edit-ready outputs to the production team without manual review.",
+    impact: "Event recording converted to 3 viral-ready clips in under 10 minutes.",
+    narrative: "Google Drive authenticated transcription pipeline that watches a folder, runs AI transcription, and auto-identifies high-outreach viral moments from deep esoteric content, delivering edit-ready outputs to the production team without manual review.",
     chips: ["Google OAuth", "Drive API", "AI Transcription", "ATSA", "Automation"],
   },
   {
@@ -140,8 +140,8 @@ const projects = [
     wave: "Quality Layer",
     url: "https://textract.replit.app",
     color: "#34d8ee",
-    impact: "AI vision OCR + Tesseract. The integrity checkpoint.",
-    narrative: "Screenshot-to-text extraction using AI vision OCR and Tesseract in parallel, with formatting tools for case conversion and post-processing. The quality gate of the transcription pipeline: ensuring what enters the system is clean, structured, and correct.",
+    impact: "AI vision OCR and Tesseract serving as the integrity checkpoint.",
+    narrative: "Screenshot-to-text extraction using AI vision OCR and Tesseract in parallel, with formatting tools for case conversion and post-processing. The quality gate of the transcription pipeline ensures what enters the system is clean, structured, and correct.",
     chips: ["AI Vision", "Tesseract OCR", "Text Processing", "Pipeline"],
   },
   {
@@ -150,8 +150,8 @@ const projects = [
     wave: "Content Automation",
     url: "https://imageni.replit.app",
     color: "#ffcf6b",
-    impact: "devipuram.org: 3 weeks of content → 3 hours.",
-    narrative: "Canvas-based styled quote image generator — font, colour, layout, download. Built for a spiritual and cultural organisation whose content team previously spent three weeks producing what this tool renders in hours.",
+    impact: "devipuram.org: 3 weeks of content reduced to 3 hours.",
+    narrative: "Canvas-based styled quote image generator featuring font, colour, layout, and download capabilities. Built for a spiritual and cultural organisation whose content team previously spent three weeks producing what this tool renders in hours.",
     chips: ["Canvas", "Content Automation", "Social Media", "devipuram.org"],
   },
   {
@@ -170,7 +170,7 @@ const projects = [
     wave: "Production Tooling",
     url: "https://video-freeze-frame.replit.app",
     color: "#6f76ff",
-    impact: "Lossless frame capture. Entirely client-side.",
+    impact: "Lossless frame capture handled entirely client-side.",
     narrative: "Browser-native tool for capturing still frames from video at full native resolution, exported as lossless PNG. Zero uploads, zero server dependency. The fastest tool removes the most steps.",
     chips: ["Client-Side", "Video", "PNG Export", "Privacy-First"],
   },
@@ -180,7 +180,7 @@ const projects = [
     wave: "Team Infrastructure",
     url: "https://tuime.replit.app",
     color: "#ffcf6b",
-    impact: "Tracks hours. Keeps the team in rhythm.",
+    impact: "Tracks hours and keeps the team in rhythm.",
     narrative: "Interval timer with custom chimes, colour-coded timestamps, and localStorage persistence. Built for the production team. Small tool, large signal: an architect who builds for the people around her.",
     chips: ["Team Tooling", "Time Tracking", "localStorage", "Org Design"],
   },
@@ -232,12 +232,16 @@ export default function App() {
             Motadaka
           </div>
           <div className="hidden md:flex gap-6">
-            {[["#work","Work"],["#timeline","Experience"],["#builds","Builds"],["#artist","Artist"]].map(([href, label]) => (
+            {[["#work","Work"],["#timeline","Experience"],["#builds","Builds"]].map(([href, label]) => (
               <a key={href} href={href}
                 className="text-[13px] tracking-[0.1em] uppercase text-[#a3aec5] hover:text-[#edf0f7] transition-colors duration-300 no-underline">
                 {label}
               </a>
             ))}
+            <Link href="/artist"
+              className="text-[13px] tracking-[0.1em] uppercase text-[#a3aec5] hover:text-[#edf0f7] transition-colors duration-300 no-underline">
+              Artist
+            </Link>
           </div>
         </div>
       </nav>
@@ -350,25 +354,33 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* NARRATIVE */}
+        {/* KEYWORDS MARQUEE */}
         <motion.section
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
-          className="max-w-[720px]"
+          className="w-full overflow-hidden pt-10"
         >
-          <motion.p variants={fadeUp} className="text-[12px] tracking-[0.26em] uppercase text-[#34d8ee] font-sans font-medium mb-4">
-            An Architect at the Intersection
+          <motion.p variants={fadeUp} className="text-[12px] tracking-[0.26em] uppercase text-[#34d8ee] font-sans font-medium mb-8">
+            Professional Focus
           </motion.p>
-          <div className="flex flex-col gap-6 text-[clamp(17px,1.9vw,19px)] text-[#a3aec5] leading-[1.72] font-sans">
-            <motion.p variants={fadeUp}>
-              At <strong className="text-[#edf0f7] font-semibold">A Thousand Suns Academy</strong>, the mandate was encoding esoteric and ancient wisdom into secure, scalable modern infrastructure — a Flutter mobile app governed by a 10-service AWS stack, identity secured through OAuth 2.0, SAML, and JWT, and a media pipeline that moves sacred content from recording to platform without losing integrity.
-            </motion.p>
-            <motion.p variants={fadeUp}>
-              At <strong className="text-[#edf0f7] font-semibold">Billion Readers</strong>, the work extended to indigenous cultural preservation. The <em>FirstSongs</em> initiative uses AI tools like Suno to bring indigenous songs to professional audio quality and embed them in archival infrastructure designed for longevity. AI skill-share sessions drove organisational adoption of Claude, Adobe Firefly, and Gemini — transforming how a cross-country nonprofit collaborates and contracts at national scale.
-            </motion.p>
-            <motion.p variants={fadeUp}>
-              At <strong className="text-[#edf0f7] font-semibold">Invisible Technologies</strong>, the standard was different in kind: data quality assurance for text-to-vision model training pipelines supporting tier-one frontier artificial intelligence laboratories, where correctness is not optional. What a model learns is determined entirely by what it is shown.
-            </motion.p>
+          <div className="flex overflow-hidden relative w-full" style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)", maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}>
+            <motion.div 
+               className="flex gap-10 whitespace-nowrap min-w-max pr-10"
+               animate={{ x: ["0%", "-50%"] }}
+               transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+            >
+               {[
+                 "Governance, Risk & Compliance", "AI Systems Architecture", "Technology Strategy", "Regulatory Data Integrity", "Agentic AI Design", "Product Ownership", "Market and Technology R&D", "Technical Liaison Work", "Privacy By Design", "Audit Integrity", "Enterprise Change Management",
+                 "Governance, Risk & Compliance", "AI Systems Architecture", "Technology Strategy", "Regulatory Data Integrity", "Agentic AI Design", "Product Ownership", "Market and Technology R&D", "Technical Liaison Work", "Privacy By Design", "Audit Integrity", "Enterprise Change Management"
+               ].map((kw, i) => (
+                 <div key={i} className="flex items-center gap-10">
+                   <span className="text-[clamp(18px,2.2vw,28px)] font-sans font-medium tracking-[0.15em] uppercase text-[#a3aec5]">
+                     {kw}
+                   </span>
+                   <span className="w-1.5 h-1.5 rounded-full bg-[#34d8ee]/40 inline-block"></span>
+                 </div>
+               ))}
+            </motion.div>
           </div>
         </motion.section>
 
@@ -533,7 +545,7 @@ export default function App() {
           </motion.div>
         </motion.section>
 
-        {/* SNIEAKS */}
+        {/* ARTIST CARD */}
         <motion.section id="artist"
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
@@ -543,16 +555,17 @@ export default function App() {
             Artist
           </motion.p>
           <motion.div variants={fadeUp}>
-            {/* Outer card with Mandelbrot canvas bg */}
+            {/* Outer card */}
             <Link href="/artist" className="block relative rounded-[22px] border border-white/[0.06] overflow-hidden group cursor-pointer hover:border-[rgba(255,207,107,0.4)] transition-all duration-300 no-underline"
-              style={{ background: "rgba(7,8,15,0.82)" }}>
-
+              style={{ background: "rgba(7,8,15,0.82)" }}
+              data-testid="link-artist-page"
+            >
               {/* Mandelbrot fractal background */}
               <MandelbrotCanvas />
 
               {/* Dark overlay on top of fractal */}
               <div className="absolute inset-0 rounded-[22px]"
-                style={{ background: "linear-gradient(160deg, rgba(7,8,15,0.62) 0%, rgba(7,8,15,0.78) 100%)" }} />
+                style={{ background: "linear-gradient(160deg, rgba(7,8,15,0.62) 0%, rgba(7,8,15,0.85) 100%)" }} />
 
               {/* Warm gradient border inset */}
               <div className="absolute inset-0 rounded-[22px] pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-300"
@@ -565,63 +578,30 @@ export default function App() {
                 }} />
 
               {/* Content */}
-              <div className="relative z-10 p-8 md:p-12 flex flex-col gap-8 pointer-events-none">
-
-                {/* Top: image + title + copy */}
-                <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-                  {/* Spotify artist photo */}
-                  <div className="shrink-0">
-                    <img
-                      src="https://i.scdn.co/image/ab676161000051743e361fd971f5a6e6c9c14180"
-                      alt="Snieaks"
-                      className="w-[130px] h-[130px] md:w-[160px] md:h-[160px] rounded-2xl object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                      style={{ border: "1px solid rgba(255,207,107,0.28)", boxShadow: "0 0 40px rgba(255,207,107,0.14)" }}
-                    />
-                  </div>
-
-                  <div className="flex-1">
-                    <h3 className="font-display font-semibold text-[clamp(32px,5vw,54px)] leading-[1.0] mb-3"
-                      style={{
-                        background: "linear-gradient(108deg, #ffcf6b, #ff7ab8, #ffcf6b)",
-                        backgroundSize: "300% 100%",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                        animation: "auraDrift 9s ease-in-out infinite",
-                      }}>
-                      Snieaks
-                    </h3>
-                    <p className="text-[clamp(16px,1.85vw,18px)] text-[#a3aec5] leading-[1.76] max-w-[54ch] mb-6 font-sans">
-                      The accumulation of multiple theories of everything. Songs released across Spotify, Apple Music, and YouTube — and a living home at <span className="text-[#edf0f7] border-b border-white/20">snieaks.com</span> where the universe inside the music renders live in the browser. Fractal worlds. Sound that holds the whole thing.
-                    </p>
-                    <div className="flex flex-wrap gap-3">
-                      <div
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7]"
-                        style={{ background: "rgba(255,255,255,0.05)" }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                        Spotify
-                      </div>
-                      <div
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7]"
-                        style={{ background: "rgba(255,255,255,0.05)" }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        YouTube
-                      </div>
-                      <div
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7]"
-                        style={{ background: "rgba(255,255,255,0.05)" }}>
-                        <ExternalLink size={14} strokeWidth={1.5} />
-                        snieaks.com
-                      </div>
-                    </div>
-                  </div>
+              <div className="relative z-10 p-8 md:p-12 flex flex-col gap-6 items-center text-center pointer-events-none">
+                <h3 className="font-display font-semibold text-[clamp(28px,4vw,46px)] leading-[1.0]"
+                  style={{
+                    background: "linear-gradient(108deg, #ffcf6b, #ff7ab8, #ffcf6b)",
+                    backgroundSize: "300% 100%",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    animation: "auraDrift 9s ease-in-out infinite",
+                  }}>
+                  Digital Arts & Sound
+                </h3>
+                <p className="text-[clamp(15px,1.7vw,17px)] text-[#a3aec5] leading-[1.76] max-w-[54ch] font-sans">
+                  The accumulation of multiple theories of everything. Fractal worlds, immersive environments, and sound design forming a unified interactive space.
+                </p>
+                <div className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[rgba(255,207,107,0.3)] text-[12px] uppercase tracking-widest text-[#edf0f7] group-hover:bg-[rgba(255,207,107,0.1)] transition-colors duration-300">
+                  Enter Gallery
                 </div>
               </div>
             </Link>
           </motion.div>
         </motion.section>
 
-        {/* CLOSING — A LIVING PARADOX */}
+        {/* CLOSING */}
         <motion.section
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
@@ -639,7 +619,7 @@ export default function App() {
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>
-              A living paradox.
+              A living synthesis.
             </motion.h2>
             <motion.p variants={fadeUp}
               className="text-[clamp(16px,1.85vw,19px)] text-[#a3aec5] leading-[1.78] max-w-[60ch] font-sans text-center">
@@ -647,11 +627,11 @@ export default function App() {
             </motion.p>
             <motion.p variants={fadeUp}
               className="text-[clamp(15px,1.7vw,17px)] text-[#727e9c] leading-[1.80] max-w-[58ch] font-sans text-center">
-              The rarest things cannot coexist — except they do, here, in one body of work. Speed and quality. Precision and feeling. The frontier of what is possible and the depth of what has always been true. A financial institution and a fractal. An indigenous song and a language model. A change governance framework and a song about the void.
+              The rarest things coexist here in one body of work. Speed and quality. Precision and feeling. The frontier of what is possible and the depth of what has always been true. A financial institution and a fractal. An indigenous song and a language model. A change governance framework and a song about the void.
             </motion.p>
             <motion.p variants={fadeUp}
               className="font-display font-semibold italic text-[clamp(18px,2.2vw,24px)] text-[#edf0f7]/70 max-w-[36ch] text-center">
-              The thread is not contradiction. It is the accumulation of multiple theories of everything, held by one standard: integrity — in the data, in the systems, in the people on either side of every decision.
+              The thread is the accumulation of multiple theories of everything, held by one standard: integrity in the data, in the systems, and in the people on either side of every decision.
             </motion.p>
           </div>
 
@@ -659,7 +639,7 @@ export default function App() {
             {[
               {
                 label: "Precision + Poetry",
-                body: "The same mind that validates what a machine learns to see also writes the music that plays when you close your eyes. These are not opposites. They are the same impulse.",
+                body: "The same mind that validates what a machine learns to see also writes the music that plays when you close your eyes. These spring from the exact same impulse.",
                 color: "#34d8ee",
               },
               {
@@ -669,7 +649,7 @@ export default function App() {
               },
               {
                 label: "Scale + Soul",
-                body: "Systems that reach national television and tier-one frontier artificial intelligence laboratories. Tools that give a single team member three weeks of their life back. Both matter. Neither is more important than the other.",
+                body: "Systems that reach national television and tier-one frontier artificial intelligence laboratories. Tools that give a single team member three weeks of their life back. Both matter deeply. Both demand the identical level of care.",
                 color: "#21e6b3",
               },
             ].map((c, i) => (
@@ -694,7 +674,6 @@ export default function App() {
             {[
               ["https://billionreaders.org", "billionreaders.org"],
               ["https://kleam.ai", "kleam.ai"],
-              ["https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl", "Snieaks on Spotify"],
             ].map(([href, label]) => (
               <a key={href} href={href} target="_blank" rel="noopener noreferrer"
                 className="hover:text-[#edf0f7] transition-colors no-underline">{label}</a>
