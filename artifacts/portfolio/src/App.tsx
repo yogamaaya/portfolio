@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Volume2, VolumeX, ExternalLink } from "lucide-react";
 
@@ -543,7 +544,7 @@ export default function App() {
           </motion.p>
           <motion.div variants={fadeUp}>
             {/* Outer card with Mandelbrot canvas bg */}
-            <div className="relative rounded-[22px] border border-white/[0.06] overflow-hidden"
+            <Link href="/artist" className="block relative rounded-[22px] border border-white/[0.06] overflow-hidden group cursor-pointer hover:border-[rgba(255,207,107,0.4)] transition-all duration-300 no-underline"
               style={{ background: "rgba(7,8,15,0.82)" }}>
 
               {/* Mandelbrot fractal background */}
@@ -554,7 +555,7 @@ export default function App() {
                 style={{ background: "linear-gradient(160deg, rgba(7,8,15,0.62) 0%, rgba(7,8,15,0.78) 100%)" }} />
 
               {/* Warm gradient border inset */}
-              <div className="absolute inset-0 rounded-[22px] pointer-events-none"
+              <div className="absolute inset-0 rounded-[22px] pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-300"
                 style={{
                   padding: "1px",
                   background: "linear-gradient(140deg, rgba(255,207,107,0.45), transparent 44%, transparent 58%, rgba(255,122,184,0.38))",
@@ -564,7 +565,7 @@ export default function App() {
                 }} />
 
               {/* Content */}
-              <div className="relative z-10 p-8 md:p-12 flex flex-col gap-8">
+              <div className="relative z-10 p-8 md:p-12 flex flex-col gap-8 pointer-events-none">
 
                 {/* Top: image + title + copy */}
                 <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
@@ -573,7 +574,7 @@ export default function App() {
                     <img
                       src="https://i.scdn.co/image/ab676161000051743e361fd971f5a6e6c9c14180"
                       alt="Snieaks"
-                      className="w-[130px] h-[130px] md:w-[160px] md:h-[160px] rounded-2xl object-cover"
+                      className="w-[130px] h-[130px] md:w-[160px] md:h-[160px] rounded-2xl object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                       style={{ border: "1px solid rgba(255,207,107,0.28)", boxShadow: "0 0 40px rgba(255,207,107,0.14)" }}
                     />
                   </div>
@@ -591,38 +592,27 @@ export default function App() {
                       Snieaks
                     </h3>
                     <p className="text-[clamp(16px,1.85vw,18px)] text-[#a3aec5] leading-[1.76] max-w-[54ch] mb-6 font-sans">
-                      The accumulation of multiple theories of everything. Songs released across Spotify, Apple Music, and YouTube — and a living home at{" "}
-                      <a href="https://snieaks.com" target="_blank" rel="noopener noreferrer"
-                        className="text-[#edf0f7] hover:text-[#ffcf6b] transition-colors no-underline border-b border-white/20 hover:border-[#ffcf6b]/60">
-                        snieaks.com
-                      </a>
-                      {" "}where the universe inside the music renders live in the browser. Fractal worlds. Sound that holds the whole thing.
+                      The accumulation of multiple theories of everything. Songs released across Spotify, Apple Music, and YouTube — and a living home at <span className="text-[#edf0f7] border-b border-white/20">snieaks.com</span> where the universe inside the music renders live in the browser. Fractal worlds. Sound that holds the whole thing.
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <a href="https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl"
-                        target="_blank" rel="noopener noreferrer"
-                        data-testid="link-spotify"
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[#1DB954] hover:-translate-y-[2px]"
+                      <div
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7]"
                         style={{ background: "rgba(255,255,255,0.05)" }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
                         Spotify
-                      </a>
-                      <a href="https://www.youtube.com/@snieaks"
-                        target="_blank" rel="noopener noreferrer"
-                        data-testid="link-youtube"
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[#FF0000] hover:-translate-y-[2px]"
+                      </div>
+                      <div
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7]"
                         style={{ background: "rgba(255,255,255,0.05)" }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                         YouTube
-                      </a>
-                      <a href="https://snieaks.com"
-                        target="_blank" rel="noopener noreferrer"
-                        data-testid="link-snieaks-site"
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7] no-underline transition-all duration-300 hover:border-[rgba(255,207,107,0.5)] hover:-translate-y-[2px]"
+                      </div>
+                      <div
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-[11px] border border-white/10 text-[13.5px] font-sans font-medium text-[#edf0f7]"
                         style={{ background: "rgba(255,255,255,0.05)" }}>
                         <ExternalLink size={14} strokeWidth={1.5} />
                         snieaks.com
-                      </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -637,14 +627,14 @@ export default function App() {
                   <iframe
                     src="https://snieaks.com"
                     title="Snieaks"
-                    className="w-full"
+                    className="w-full pointer-events-none"
                     style={{ height: "420px", border: "none", display: "block" }}
                     allow="autoplay; encrypted-media"
+                    tabIndex={-1}
                   />
                 </div>
-
               </div>
-            </div>
+            </Link>
           </motion.div>
         </motion.section>
 
@@ -717,7 +707,7 @@ export default function App() {
       <footer className="border-t border-white/[0.06] py-10 px-6">
         <div className="max-w-[1080px] mx-auto flex flex-col md:flex-row justify-between items-center gap-5">
           <div className="font-display font-semibold text-lg tracking-widest text-[#edf0f7]">MOTADAKA</div>
-          <div className="flex gap-5 text-[12.5px] text-[#727e9c] font-sans tracking-[0.04em]">
+          <div className="flex flex-wrap justify-center gap-5 text-[12.5px] text-[#727e9c] font-sans tracking-[0.04em]">
             {[
               ["https://billionreaders.org", "billionreaders.org"],
               ["https://kleam.ai", "kleam.ai"],
@@ -726,6 +716,7 @@ export default function App() {
               <a key={href} href={href} target="_blank" rel="noopener noreferrer"
                 className="hover:text-[#edf0f7] transition-colors no-underline">{label}</a>
             ))}
+            <Link href="/legal" className="hover:text-[#edf0f7] transition-colors no-underline">Legal</Link>
           </div>
           <div className="text-[12px] text-[#727e9c] font-sans">
             Strategy · Security Architecture · AI Research · 2026

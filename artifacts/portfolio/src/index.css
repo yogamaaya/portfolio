@@ -102,6 +102,18 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .bg-fluid-spanda { background: linear-gradient(-45deg, #1f0438, #3b0a45, #0f0426, #210214); background-size: 400% 400%; animation: fluid-bg 15s ease infinite; }
+  .bg-fluid-breath { background: linear-gradient(-45deg, #0a1930, #14324f, #050b14, #082436); background-size: 400% 400%; animation: fluid-bg 12s ease infinite; }
+  .bg-fluid-cyma { background: linear-gradient(-45deg, #3d0725, #5e0b2e, #1c020d, #290412); background-size: 400% 400%; animation: fluid-bg 18s ease infinite; }
+  .bg-fluid-kleam { background: linear-gradient(-45deg, #181938, #2a2c59, #090914, #121326); background-size: 400% 400%; animation: fluid-bg 14s ease infinite; }
+  .bg-fluid-social { background: linear-gradient(-45deg, #2b1d09, #4a3411, #120a02, #1c1004); background-size: 400% 400%; animation: fluid-bg 16s ease infinite; }
+}
+
+@keyframes fluid-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes aurora-text {
