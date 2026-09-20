@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Volume2, VolumeX, ExternalLink } from "lucide-react";
+import RouteSeo from "./seo/RouteSeo";
 
 function MandelbrotCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -208,6 +209,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#07080f] text-[#edf0f7] font-sans overflow-x-hidden">
+      <RouteSeo
+        title="Snigdha Motadaka | Systems Architect & Systems Design"
+        description="Snigdha Motadaka works across systems architecture, cybersecurity, AI governance, and multidisciplinary digital art as snieaks."
+        path="/"
+      />
 
       {/* AURORA BLOBS */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -223,24 +229,23 @@ export default function App() {
           style={{ background: "radial-gradient(circle at 50% 50%, #ff7ab8, transparent 64%)", animationDuration: "32s" }} />
       </div>
 
+      <header>
       {/* STICKY NAV */}
-      <nav className="sticky top-0 z-40 border-b border-white/[0.06] backdrop-blur-[11px]"
+      <nav aria-label="Primary navigation" className="sticky top-0 z-40 border-b border-white/[0.06] backdrop-blur-[11px]"
         style={{ background: "linear-gradient(180deg, rgba(7,8,15,0.82), rgba(7,8,15,0.32))" }}>
         <div className="max-w-[1080px] mx-auto px-6 py-[14px] flex items-center justify-between gap-5">
           <div className="font-display font-semibold text-xl tracking-wide flex items-center gap-2">
             <span className="inline-block w-[7px] h-[7px] rounded-full bg-[#21e6b3] shadow-[0_0_12px_#21e6b3]" />
             Motadaka
           </div>
-          <div className="hidden md:flex gap-6">
-            {[["#work","Work"],["#timeline","Experience"],["#builds","Builds"]].map(([href, label]) => (
-              <a key={href} href={href}
-                className="text-[13px] tracking-[0.1em] uppercase text-[#a3aec5] hover:text-[#edf0f7] transition-colors duration-300 no-underline">
-                {label}
-              </a>
-            ))}
-            <Link href="/artist"
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="/systems"
               className="text-[13px] tracking-[0.1em] uppercase text-[#a3aec5] hover:text-[#edf0f7] transition-colors duration-300 no-underline">
-              Artist
+              Technical Research & Systems
+            </Link>
+            <Link href="/snieaks"
+              className="text-[13px] tracking-[0.1em] uppercase text-[#a3aec5] hover:text-[#edf0f7] transition-colors duration-300 no-underline">
+              Snieaks (Art & Media)
             </Link>
           </div>
         </div>
@@ -312,6 +317,7 @@ export default function App() {
           </motion.div>
         </motion.div>
       </section>
+      </header>
 
       {/* ── MAIN CONTENT ── */}
       <main className="max-w-[1080px] mx-auto px-6 pb-32 flex flex-col gap-28 md:gap-40">
@@ -556,7 +562,7 @@ export default function App() {
           </motion.p>
           <motion.div variants={fadeUp}>
             {/* Outer card */}
-            <Link href="/artist" className="block relative rounded-[22px] border border-white/[0.06] overflow-hidden group cursor-pointer hover:border-[rgba(255,207,107,0.4)] transition-all duration-300 no-underline"
+            <Link href="/snieaks" className="block relative rounded-[22px] border border-white/[0.06] overflow-hidden group cursor-pointer hover:border-[rgba(255,207,107,0.4)] transition-all duration-300 no-underline"
               style={{ background: "rgba(7,8,15,0.82)" }}
               data-testid="link-artist-page"
             >

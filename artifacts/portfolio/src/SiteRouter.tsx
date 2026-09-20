@@ -8,6 +8,7 @@ const Video = lazy(() => import("./experiences/VideoPlayerPage"));
 const Legal = lazy(() => import("./experiences/LegalPage"));
 const Cyma = lazy(() => import("./cyma/CymaPage"));
 const Artist = lazy(() => import("./artist/ArtistPage"));
+const Systems = lazy(() => import("./pages/SystemsPage"));
 
 export default function SiteRouter() {
   const [location] = useLocation();
@@ -19,6 +20,8 @@ export default function SiteRouter() {
     "/legal": Legal,
     "/cyma": Cyma,
     "/artist": Artist,
+    "/snieaks": Artist,
+    "/systems": Systems,
   };
   const Page = routes[path];
   if (!Page) return <Portfolio />;

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ExternalLink, Music, Video as VideoIcon, ChevronDown } from "lucide-react";
+import { ArrowLeft, ExternalLink, Instagram, Music, Video as VideoIcon, ChevronDown } from "lucide-react";
+import RouteSeo from "../seo/RouteSeo";
 
 const strips = [
   { 
@@ -46,6 +47,22 @@ export default function ArtistPage() {
 
   return (
     <div className="relative min-h-[100dvh] w-full bg-[#070414] text-[#edf0f7] font-sans flex flex-col overflow-x-hidden">
+      <RouteSeo
+        title="Snieaks | Creative & Digital Art by Snigdha Motadaka"
+        description="Snieaks is the creative identity of Snigdha Motadaka, connecting systems architecture and cybersecurity with digital art, music, and multimedia."
+        path="/snieaks"
+        pageSchema={[
+          {
+            "@type": "WebPage",
+            "@id": "https://motadaka.com/snieaks#webpage",
+            url: "https://motadaka.com/snieaks",
+            name: "Snieaks | Creative & Digital Art by Snigdha Motadaka",
+            alternateName: "snieaks",
+            isPartOf: { "@id": "https://motadaka.com/#website" },
+            about: { "@id": "https://motadaka.com/#person" },
+          },
+        ]}
+      />
       
       {/* Header */}
       <header className="pt-12 pb-10 px-6 md:px-12 flex justify-between items-center max-w-[1200px] mx-auto w-full z-20">
@@ -64,6 +81,16 @@ export default function ArtistPage() {
           </span>
         </div>
       </header>
+
+      <section className="px-6 pb-12 text-center relative z-10" aria-labelledby="snieaks-title">
+        <p className="text-[11px] uppercase tracking-[0.28em] text-[#ff7ab8] mb-4">Creative identity of Snigdha Motadaka</p>
+        <h1 id="snieaks-title" className="font-sans font-semibold uppercase tracking-[0.24em] text-[clamp(34px,7vw,70px)] metallic-text" style={{ "--glow": "#ff7ab8" } as React.CSSProperties}>
+          Snieaks
+        </h1>
+        <p className="mt-5 mx-auto max-w-[58ch] text-white/55 leading-relaxed">
+          Digital art, music, and multimedia experiments shaped by the same systems thinking that informs the technical work.
+        </p>
+      </section>
 
       {/* Main Strips Container */}
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-8 pb-20 flex flex-col gap-5 relative z-10">
@@ -223,6 +250,16 @@ export default function ArtistPage() {
             Media
           </div>
           <div className="flex items-center gap-4">
+            <a
+              href="https://www.instagram.com/snieaks"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-instagram"
+              className="flex items-center gap-3 px-6 py-3 rounded-full border border-white/10 bg-white/5 hover:border-[#ff7ab8]/50 hover:bg-[#ff7ab8]/10 transition-all duration-300 group no-underline"
+            >
+              <Instagram size={16} className="text-[#ff7ab8] group-hover:scale-110 transition-transform" />
+              <span className="text-[11px] font-medium tracking-[0.15em] text-white uppercase">Instagram</span>
+            </a>
             <a 
               href="https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl"
               target="_blank"
