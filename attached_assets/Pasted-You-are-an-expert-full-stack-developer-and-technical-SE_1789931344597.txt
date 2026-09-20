@@ -1,0 +1,82 @@
+You are an expert full-stack developer and technical SEO architect specializing in Entity-Based SEO, Google Knowledge Graph optimization, and semantic web architecture.
+
+Your objective is to optimize and structure my personal website, motadaka.com, so that a Google search for "Snigdha Motadaka" results in motadaka.com occupying the #1 position with rich organic sitelinks, followed hierarchically by my technical/systems research, and then my creative identity as "snieaks" (YouTube, Instagram).
+
+Implement the following architectural specifications across the project:
+
+### 1. Semantic Architecture & Directory Structure
+Ensure the site has a clear internal hierarchy with the following routing and navigation:
+- `/` (Home): The sovereign command hub introducing Snigdha Motadaka as a Systems Architect & Technologist, bridging technical systems with creative exploration.
+- `/systems` (or `/research`): Primary technical portfolio covering systems architecture, cybersecurity, AI governance, technical publications, and links to LinkedIn/GitHub/academic work.
+- `/snieaks`: The creative and artistic portal featuring digital art, music, multimedia projects, and embedded feeds/links to YouTube and Instagram.
+
+### 2. Comprehensive JSON-LD Entity Graph (Crucial)
+Inject a unified, connected `@graph` schema in the `<head>` of the root page (`index.html` or layout template). Do not use separate disconnected schema blocks.
+Use this structure:
+
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://motadaka.com/#person",
+      "name": "Snigdha Motadaka",
+      "alternateName": ["snieaks", "Snieaks"],
+      "url": "https://motadaka.com",
+      "jobTitle": "Systems Architect & AI Consultant",
+      "description": "Systems architect, cybersecurity researcher, and multidisciplinary digital artist.",
+      "mainEntityOfPage": "https://motadaka.com",
+      "sameAs": [
+        "https://www.linkedin.com/in/YOUR-LINKEDIN",
+        "https://github.com/YOUR-GITHUB",
+        "https://www.youtube.com/@YOUR-YOUTUBE",
+        "https://www.instagram.com/YOUR-INSTAGRAM"
+      ],
+      "knowsAbout": [
+        "Systems Architecture",
+        "Cybersecurity",
+        "AI Governance",
+        "Digital Art",
+        "Music Production"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://motadaka.com/#website",
+      "url": "https://motadaka.com",
+      "name": "Snigdha Motadaka",
+      "publisher": {
+        "@id": "https://motadaka.com/#person"
+      }
+    }
+  ]
+}
+
+On `/systems`, inject a WebPage schema with `@type`: "ItemPage" and a `BreadcrumbList` linking `Home > Systems & Research`.
+On `/snieaks`, inject a WebPage schema declaring `about`: `{"@id": "https://motadaka.com/#person"}` and alternate name `snieaks`.
+
+### 3. OpenGraph & Meta Tag Standardization
+Ensure every page contains strict OpenGraph and Twitter card metadata:
+- Canonical tags: Explicitly declare `<link rel="canonical" href="..." />` on every single route to prevent duplicate content flags.
+- Title structure:
+  - Root: "Snigdha Motadaka | Systems Architect & Systems Design"
+  - Systems: "Systems & Technical Research | Snigdha Motadaka"
+  - Snieaks: "Snieaks | Creative & Digital Art by Snigdha Motadaka"
+- Meta description with exact entity phrasing: Include "Snigdha Motadaka", "systems architecture", "cybersecurity", and "snieaks" naturally in the descriptions.
+
+### 4. Technical Files: sitemap.xml & robots.txt
+1. Generate a valid `public/robots.txt`:
+   User-agent: *
+   Allow: /
+   Sitemap: https://motadaka.com/sitemap.xml
+
+2. Generate a valid `public/sitemap.xml` with priority weighting:
+   - `https://motadaka.com/` (Priority: 1.0)
+   - `https://motadaka.com/systems` (Priority: 0.8)
+   - `https://motadaka.com/snieaks` (Priority: 0.7)
+
+### 5. Semantic HTML & Internal Anchor Text
+- Use strict HTML5 semantic landmarks (`<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`).
+- Ensure the primary navigation contains descriptive text anchors (e.g., `<a href="/systems">Technical Research & Systems</a>` and `<a href="/snieaks">Snieaks (Art & Media)</a>`) so Google's Sitelinks parser extracts these exact labels.
+
+Review the codebase, make all required code edits, and confirm that all JSON-LD schemas validate without syntax errors.
