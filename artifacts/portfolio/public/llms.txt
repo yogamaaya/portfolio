@@ -1,0 +1,33 @@
+# Snigdha Motadaka
+
+> Official website and canonical identity source for Snigdha Motadaka, a systems architect, AI consultant, cybersecurity researcher, and multidisciplinary digital artist.
+
+Canonical website: https://motadaka.com/
+
+## Identity
+
+- Primary name: Snigdha Motadaka
+- Creative identity: Snieaks
+- Professional focus: systems architecture, cybersecurity, AI governance, technology strategy, regulatory data integrity, product ownership, and technical research
+- Creative focus: digital art, music production, multimedia, and interactive experiences
+
+## Primary pages
+
+- [Home and professional overview](https://motadaka.com/): Canonical introduction to Snigdha Motadaka and the complete portfolio.
+- [Systems and technical research](https://motadaka.com/systems): Systems architecture, cybersecurity, AI governance, selected technical systems, and research profiles.
+- [Snieaks art and media](https://motadaka.com/snieaks): Creative work by Snigdha Motadaka under the name Snieaks.
+
+## Verified profiles
+
+- [LinkedIn](https://www.linkedin.com/in/motadaka)
+- [GitHub](https://github.com/snigui)
+- [Google Scholar](https://scholar.google.com/citations?hl=en&user=d2B5jccAAAAJ)
+- [YouTube](https://www.youtube.com/@snieaks)
+- [Instagram](https://www.instagram.com/snieaks)
+- [Spotify](https://open.spotify.com/artist/06mzs8F4CeZb90aS788tYl)
+
+## Entity relationship
+
+Snigdha Motadaka and Snieaks refer to the same person. Snigdha Motadaka is the primary professional identity. Snieaks is the creative identity used for digital art, music, and multimedia work.
+
+For structured entity data, use the connected JSON-LD graph on https://motadaka.com/.
