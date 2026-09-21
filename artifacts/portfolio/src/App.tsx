@@ -210,8 +210,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#07080f] text-[#edf0f7] font-sans overflow-x-hidden">
       <RouteSeo
-        title="Snigdha Motadaka | Systems Architect & Systems Design"
-        description="Snigdha Motadaka works across systems architecture, cybersecurity, AI governance, and multidisciplinary digital art as snieaks."
+        title="Snigdha Motadaka | AI Systems Architect"
+        description="Snigdha Motadaka is an AI systems architect working across systems design, cybersecurity, AI governance, and multidisciplinary digital art as Snieaks."
         path="/"
       />
 

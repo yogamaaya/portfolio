@@ -110,7 +110,7 @@ export default function SystemsPage() {
               Architecture with integrity at every layer.
             </h1>
             <p className="mt-8 text-[clamp(17px,2vw,22px)] leading-[1.7] text-[#a3aec5] max-w-[70ch]">
-              Snigdha Motadaka is a systems architect and technologist working across cybersecurity,
+              Snigdha Motadaka is an AI systems architect and technologist working across cybersecurity,
               AI governance, technical strategy, product ownership, and regulatory data integrity.
             </p>
           </section>

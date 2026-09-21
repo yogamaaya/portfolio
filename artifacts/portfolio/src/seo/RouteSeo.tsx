@@ -10,9 +10,9 @@ export const personEntity = {
   alternateName: ["snieaks", "Snieaks"],
   url: SITE_URL,
   image: `${SITE_URL}/motadaka-icon.png`,
-  jobTitle: "Systems Architect & AI Consultant",
+  jobTitle: "AI Systems Architect",
   description:
-    "Systems architect, cybersecurity researcher, AI governance practitioner, and multidisciplinary digital artist.",
+    "AI systems architect, cybersecurity researcher, AI governance practitioner, and multidisciplinary digital artist.",
   mainEntityOfPage: `${SITE_URL}/`,
   sameAs: [
     "https://www.linkedin.com/in/motadaka",
